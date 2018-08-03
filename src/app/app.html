@@ -1,8 +1,14 @@
-<ion-menu [content]="content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Menu</ion-title>
-    </ion-toolbar>
+<ion-menu id="myMenu" [content]="content">
+  <ion-header style="height:65px">
+    <ion-list>
+      <ion-item>
+        <ion-avatar item-start>
+          <img src="">
+        </ion-avatar>
+          <h2 style="text-transform: capitalize">{{(profileData | async)?.first_name}} {{(profileData | async)?.last_name}}</h2>
+        <p>{{(profileData | async)?.school}}</p>
+      </ion-item>
+    </ion-list>
   </ion-header>
 
   <ion-content>
@@ -10,6 +16,11 @@
       <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
         {{p.title}}
       </button>
+      <ion-item>
+        <button ion-button block (click)="signOut()">
+          Logout
+        </button>
+      </ion-item>
     </ion-list>
   </ion-content>
 

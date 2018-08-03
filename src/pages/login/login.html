@@ -1,0 +1,19 @@
+<ion-content>
+  <h1 text-center>Grade Up</h1>
+  <ion-list>
+
+    <ion-item>
+      <ion-label floating>Email</ion-label>
+      <ion-input [(ngModel)]="user.email" type="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Password</ion-label>
+      <ion-input [(ngModel)]="user.password" type="password"></ion-input>
+    </ion-item>
+
+  </ion-list>
+
+  <button ion-button full (click)="login()">Login</button>
+  <button ion-button outline full (click)="goToSignup()">Sign Up</button>
+</ion-content>

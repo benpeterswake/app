@@ -1,28 +1,52 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database';
+import * as firebase from 'firebase';
 
+//Pages
+import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
+import { FindtutorPage } from '../pages/findtutor/findtutor';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-
-  rootPage: any = HomePage;
-
+  rootPage: any = LoginPage;
   pages: Array<{title: string, component: any}>;
+  profileData: FirebaseObjectObservable<any>;
+  item: any;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(private afAuth: AngularFireAuth, private afDatabase: AngularFireDatabase, private platform: Platform,
+     private statusBar: StatusBar, private splashScreen: SplashScreen, private toast: ToastController) {
     this.initializeApp();
+    this.afAuth.authState.take(1).subscribe(auth => {
+      if (auth) {
+        this.profileData = this.afDatabase.object(`profile/${auth.uid}`).valueChanges();
+      }
+    });
+
+    firebase.auth().onAuthStateChanged(auth => {
+      if (auth) {
+        this.rootPage = HomePage;
+        this.toast.create({
+          message: `Success!`,
+          duration: 1000,
+          cssClass: "success"
+        }).present();
+      } else {
+        this.rootPage = LoginPage;
+      }
+    });
 
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Home', component: HomePage },
-      { title: 'List', component: ListPage }
+      { title: 'Find Tutor', component: FindtutorPage }
     ];
 
   }
@@ -35,6 +59,10 @@ export class MyApp {
       this.splashScreen.hide();
     });
   }
+
+  signOut(){
+    this.afAuth.auth.signOut()
+  }﻿
 
   openPage(page) {
     // Reset the content nav to have just this page
