@@ -1,0 +1,45 @@
+
+page-order {
+  agm-map {
+    width: 100vw;
+    height: 90vh;
+  }
+  .location{
+    padding-top:1%;
+    position: relative;
+  }
+  .middle{
+    display: none;
+    position: absolute;
+    z-index: 4;
+    width:100%;
+    margin-top:1%;
+  }
+  .completed{
+    background: #f9f9f9;
+  }
+  .color {
+    padding-top:9px; padding-bottom: 5px;
+    color: black;
+    border-bottom: 1px solid #f4f4f4!important;
+    background-color: white!important
+  }
+  #trending{
+    display: none;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
+  }
+  #map{
+    display: none;
+  }
+  #locate{
+    display: none;
+  }
+  #prices{
+    display: none;
+  }
+  .input-bars{
+    background:white;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
+    z-index:4;
+  }
+}

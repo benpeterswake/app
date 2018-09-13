@@ -1,45 +1,63 @@
-<!--
-  Generated template for the SignupPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Sign Up</ion-title>
+    <ion-title><span style="font-size:20px">Grade Saver</span></ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content>
+  <ion-slides style="margin-top: -40px;">
+    <!-- slide 0 -->
+    <ion-slide class="padding">
+      <div class="get-started">
+        <h1>Don't study harder, <br> study smarter!</h1>
+        <button ion-button block style="margin-top:25px" (click)="changeSlide(true)">Get Started</button>
+      </div>
+    </ion-slide>
+    <!-- slide 1 -->
+    <ion-slide class="padding">
+        <h1>Create your account</h1>
+        <ion-item>
+          <ion-label floating>Full Name</ion-label>
+          <ion-input [(ngModel)]="profile.full_name" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Email Address</ion-label>
+          <ion-input [(ngModel)]="profile.email" type="email"></ion-input>
+        </ion-item>
+      <button style="margin-top: 25px" ion-button block (click)="changeSlide(true, 2)">Continue</button>
+    </ion-slide>
+    <!-- slide 2 -->
+    <ion-slide class="padding">
+      <h1>Select Your School</h1>
+      <ion-item>
+        <ion-label floating>School</ion-label>
+        <ion-input (ngModelChange)="getSchools()" [(ngModel)]="profile.school" type="text"></ion-input>
+      </ion-item>
+      <span *ngIf="autocomplete.length">
+        <ion-item *ngFor="let school of autocomplete" (click)="setSchool(school)">
+          {{school?.name}}
+        </ion-item>
+      </span>
+      <button style="margin-top: 25px" ion-button block (click)="changeSlide(true, 3)">Continue</button>
+    </ion-slide>
+    <!-- slide 3 -->
+    <ion-slide class="padding">
+      <h1>You'll need a password</h1>
+      <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input [(ngModel)]="user.password" type="password"></ion-input>
+      </ion-item>
+      <button style="margin-top: 25px" ion-button block (click)="signUp()">Sign Up!</button>
+    </ion-slide>
 
-  <ion-list>
-    <ion-item>
-      <ion-label floating>First Name</ion-label>
-      <ion-input [(ngModel)]="profile.first_name" type="text"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Last Name</ion-label>
-      <ion-input [(ngModel)]="profile.last_name" type="text"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>School</ion-label>
-      <ion-input [(ngModel)]="profile.last_name" type="text"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label floating>Email</ion-label>
-      <ion-input [(ngModel)]="user.email" type="email" required></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label floating>Password</ion-label>
-      <ion-input [(ngModel)]="user.password" type="password"></ion-input>
-    </ion-item>
-  </ion-list>
-
-  <button ion-button full (click)="signUp()" type="submit">Sign Up!</button>
-  <button ion-button outline full (click)="goToLogin()">Already a user?</button>
-
+  </ion-slides>
+    <span (click)="goToLogin()" class="padding" style="
+      position:absolute;
+      bottom: 40px;
+      z-index: 10000;
+      width:100%; color:grey" >Have an account already? <a>Login</a>
+    </span>
 </ion-content>

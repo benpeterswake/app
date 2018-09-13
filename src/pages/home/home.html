@@ -1,44 +1,20 @@
 <ion-header>
-  <ion-navbar color="secondary">
+  <ion-navbar>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>GradeUp</ion-title>
+    <ion-title>Grade Saver</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="goToSearch()">
+         <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <ion-slides pager style="height:30%">
-
-    <ion-slide style="background-color: green">
-      <h2>{{message?.test}}</h2>
-    </ion-slide>
-
-    <ion-slide style="background-color: blue">
-      <h2>Slide 2</h2>
-    </ion-slide>
-
-    <ion-slide style="background-color: red">
-      <h2>Slide 3</h2>
-    </ion-slide>
-
-  </ion-slides>
-
-  <ion-card>
-    <ion-card-header>
-      Recent Card
-    </ion-card-header>
-    <ion-card-content>
-      <!-- Add card content here! -->
-    </ion-card-content>
-  </ion-card>
-  <ion-card>
-    <ion-card-header>
-      Analytics Card
-    </ion-card-header>
-    <ion-card-content>
-      <!-- Add card content here! -->
-    </ion-card-content>
-  </ion-card>
-
+    <ion-item no-lines padding style="text-align:left; height:35%; background-color:#84CCC9">
+        <h1 style="color:white; font-weight:bold; font-size:1.7em; padding-bottom:5px">Dont Study Harder, <br/> Study Smarter.</h1>
+        <button ion-button style="padding:20px; font-size:1em" color="secondary" (click)="goToOrder()">Order Tutor</button>
+    </ion-item>
 </ion-content>

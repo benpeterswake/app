@@ -1,0 +1,274 @@
+<!--
+  Generated template for the OrderPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar color="primary" >
+    <button ion-button menuToggle (click)="goTutor = false">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Grade Saver</ion-title>
+    <ion-buttons *ngIf="show" (click)="cancel()" end>
+      <button ion-button>
+         Cancel
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button *ngIf="!show" ion-button (click)="goToSearch()">
+         <ion-icon name="search"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-bounce>
+<div padding *ngIf="potentialTutors.length">
+    <div text-center padding>
+      <h4>Active {{order.course}} Tutors</h4>
+      <p>Choice one to continue</p>
+    </div>
+
+    <ion-card *ngFor="let tutor of potentialTutors; let i = index">
+      <ion-item (click)="goToTutor(tutor)">
+       <ion-avatar item-start>
+         <img src="https://i1.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1">
+       </ion-avatar>
+       <h2>{{tutor.first_name}} {{tutor.last_name}}</h2>
+       <p>{{tutor.rating}} <ion-icon name="star"></ion-icon></p>
+       <ion-badge *ngIf="i === 0" style="background: gold;" item-end>
+         <ion-icon name="trophy"></ion-icon> {{tutor.rank}}</ion-badge>
+       <ion-badge *ngIf="i === 1" style="background: silver;" item-end>
+         <ion-icon name="trophy"></ion-icon> {{tutor.rank}}</ion-badge>
+       <ion-badge *ngIf="i === 2" style="background: brown;" item-end>
+         <ion-icon name="trophy"></ion-icon> {{tutor.rank}}</ion-badge>
+      </ion-item>
+      <ion-card-content (click)="goToTutor(tutor)">
+        <p>
+          The most popular industrial group ever, and largely
+          responsible for bringing the music to a mass audience.
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
+<ion-content id="search" [hidden]="potentialTutors.length" no-bounce>
+
+    <div id="inputFields" padding text-center [ngClass]="{'middle': !show}">
+
+        <ion-item class="input-bars" [ngClass]="{'completed': showLocation }" no-lines>
+          <ion-label color="primary"><ion-icon name="school"></ion-icon></ion-label>
+          <ion-input style="font-size:16px; padding: 8px 0px 8px 0px;"  no-lines (focus)="showMore()" (ngModelChange)="getCourses()" placeholder="What course can we help with?" type="text" [(ngModel)]="order.course"></ion-input>
+        </ion-item>
+
+        <ion-item *ngIf="showLocation" [ngClass]="{'completed': searchForTutor }"  class="input-bars" no-lines>
+          <ion-label color="primary"><ion-icon name="navigate"></ion-icon></ion-label>
+          <ion-input style="font-size:15px; padding: 5px 0px 5px 0px;" no-lines placeholder="Set Location" type="text" [(ngModel)]="order.location"></ion-input>
+        </ion-item>
+
+        <!-- <ion-item style="background: #E8E8E8" text-wrap no-lines text-center *ngIf="showLocation">
+          <p>Meet up location can always be changed later once tutor session has been confirmed.</p>
+        </ion-item> -->
+        <div [hidden]="courses.length" id="trending">
+          <ion-item [ngClass]="{'color': show}" no-lines color="primary">
+            <!-- <ion-icon *ngIf="!show" (click)="hideTrending()" name="remove-circle" item-end></ion-icon> -->
+            <ion-icon *ngIf="show" name="arrow-forward" style="color:lightgrey" item-end></ion-icon>
+            <h2>Trending Courses</h2>
+          </ion-item>
+          <div *ngIf="show">
+            <ion-item no-lines style="padding-top:5px; padding-bottom: 5px; border-bottom: 1px solid #f4f4f4">
+                <ion-icon name="arrow-forward" style="color:lightgrey" item-end></ion-icon>
+              <h2>Top Tutors This Week</h2>
+            </ion-item>
+            <ion-item no-lines style="padding-top:5px; padding-bottom: 5px;">
+                <ion-icon name="arrow-forward" style="color:lightgrey" item-end></ion-icon>
+              <h2>Top Priced Tutors</h2>
+            </ion-item>
+          </div>
+          <ion-list *ngIf="!show" no-lines style="margin-bottom: 0">
+            <button ion-item style="border-bottom: 1px solid #f4f4f4">
+              <ion-icon name="flame" item-start></ion-icon>
+              IS 4160
+            </button>
+            <button ion-item>
+              <ion-icon name="medical" item-start></ion-icon>
+                Math 3440
+            </button>
+          </ion-list>
+        </div>
+        <ion-item-divider *ngIf="show" style="text-align:left"><span *ngIf="courses.length">Courses</span></ion-item-divider>
+
+    </div>
+    <div *ngIf="courses.length">
+      <ion-list no-lines>
+        <button style="z-index:2" ion-item *ngFor="let course of courses" (click)="selectCourse(course)">
+              {{course?.name}}
+        </button>
+      </ion-list>
+    </div>
+
+    <!-- Generated template for the GoogleMapComponent component -->
+    <div [hidden]="show">
+      <agm-map (mapReady)="getUserLocation($event)" [disableDefaultUI]="true" [zoom]="15">
+        <agm-marker [latitude]="lat" [longitude]="lng">
+          <agm-info-window>
+            <h3>Test</h3>
+          </agm-info-window>
+        </agm-marker>
+        <agm-marker *ngFor="let marker of markers" [iconUrl]="url" [latitude]="marker.location[0]" [longitude]="marker.location[1]">
+          <agm-info-window>
+            <h3>{{marker}}</h3>
+          </agm-info-window>
+        </agm-marker>
+      </agm-map>
+    </div>
+
+
+    <ion-footer>
+      <ion-toolbar *ngIf="showLocation" color="primary">
+        <ion-title  (click)="setLocation()">Set meet up location</ion-title>
+      </ion-toolbar>
+    </ion-footer>
+
+  <!-- <div id="drawer-inner" style=" background: #f9f9f9; position: absolute; top:85%">
+
+    <div *ngIf="!top" text-center style="background:#5AD9A4; color:#39414E"  (click)="slide()">
+      <ion-icon name="arrow-up" *ngIf="!showDrawer"></ion-icon>
+      <ion-icon name="arrow-down" *ngIf="showDrawer"></ion-icon>
+    </div>
+
+    <ion-item (click)="slide()" style="" padding no-lines style="background:#39414E; color:white;">
+      <ion-icon item-start name="star"></ion-icon>
+      <h1>Top Tutors This Week</h1>
+      <h5>{{profileData?.school}}</h5>
+    </ion-item>
+
+    <ion-card *ngFor="let tutor of topTutors; let i = index">
+      <ion-item (click)="goToTutor(tutor)">
+       <ion-avatar item-start>
+         <img src="https://i1.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1">
+       </ion-avatar>
+       <h2>{{tutor.first_name}} {{tutor.last_name}}</h2>
+       <p>{{tutor.rating}} <ion-icon name="star"></ion-icon></p>
+       <ion-badge *ngIf="i === 0" style="background: gold;" item-end>
+         <ion-icon name="trophy"></ion-icon> {{tutor.rank}}</ion-badge>
+       <ion-badge *ngIf="i === 1" style="background: silver;" item-end>
+         <ion-icon name="trophy"></ion-icon> {{tutor.rank}}</ion-badge>
+       <ion-badge *ngIf="i === 2" style="background: brown;" item-end>
+         <ion-icon name="trophy"></ion-icon> {{tutor.rank}}</ion-badge>
+      </ion-item>
+      <ion-card-content (click)="goToTutor(tutor)">
+        <p>
+          The most popular industrial group ever, and largely
+          responsible for bringing the music to a mass audience.
+        </p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-item padding no-lines color="primary">
+    <ion-icon item-start name="school"></ion-icon>
+    <h1>Trending Courses</h1>
+    <h5>{{profileData?.school}}</h5>
+    </ion-item>
+
+    <ion-list no-lines style="margin-bottom:0">
+    <button ion-item>
+      <ion-icon name="flame" item-start></ion-icon>
+      IS 4160
+    </button>
+
+    <button ion-item>
+      <ion-icon name="medical" item-start></ion-icon>
+      Hospital
+    </button>
+
+    <button ion-item>
+      <ion-icon name="cafe" item-start></ion-icon>
+      Cafe
+    </button>
+
+    <button ion-item>
+      <ion-icon name="paw" item-start></ion-icon>
+      Dog Park
+    </button>
+
+    <button ion-item>
+      <ion-icon name="beer" item-start></ion-icon>
+      Pub
+    </button>
+
+    <button ion-item>
+      <ion-icon name="planet" item-start></ion-icon>
+      Space
+    </button>
+    </ion-list>
+
+    <ion-item padding no-lines color="primary">
+    <ion-icon item-start name="pricetags"></ion-icon>
+    <h1>Best Prices!</h1>
+    <h5>{{profileData?.school}}</h5>
+    </ion-item>
+    <ion-card>
+    <ion-item>
+     <ion-avatar item-start>
+       <img src="https://i1.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1">
+     </ion-avatar>
+     <h2>Marty McFly</h2>
+     <p>Rating: 4.8</p>
+    </ion-item>
+    <ion-card-content>
+      <p>
+        The most popular industrial group ever, and largely
+        responsible for bringing the music to a mass audience.
+      </p>
+    </ion-card-content>
+    </ion-card>
+    <ion-card>
+    <ion-item>
+     <ion-avatar item-start>
+       <img src="img/marty-avatar.png">
+     </ion-avatar>
+     <h2>Marty McFly</h2>
+     <p>Rating: 4.8</p>
+    </ion-item>
+    <ion-card-content>
+      <p>
+        The most popular industrial group ever, and largely
+        responsible for bringing the music to a mass audience.
+      </p>
+    </ion-card-content>
+    </ion-card>
+    <ion-card>
+    <ion-item>
+     <ion-avatar item-start>
+       <img src="img/marty-avatar.png">
+     </ion-avatar>
+     <h2>Marty McFly</h2>
+     <p>Rating: 4.8</p>
+    </ion-item>
+    <ion-card-content>
+      <p>
+        The most popular industrial group ever, and largely
+        responsible for bringing the music to a mass audience.
+      </p>
+    </ion-card-content>
+    </ion-card>
+
+    <ion-item padding center no-lines style="background:#39414E; color:white;">
+    <ion-icon name="ionic"></ion-icon>
+    <h1>Grade Up</h1>
+    <h5>Copyright 2018</h5>
+    </ion-item>
+  </div> -->
+</ion-content>
+<!-- <drawer [options]="drawerOptions">
+    <div class="content">
+      The world is your oyster.
+      <p>
+        If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
+      </p>
+    </div>
+</drawer> -->
+
+<!-- drawer menu -->

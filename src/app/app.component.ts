@@ -3,23 +3,30 @@ import { Nav, Platform, ToastController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database';
+import { AngularFireDatabase } from 'angularfire2/database';
 import * as firebase from 'firebase';
 
 //Pages
 import { LoginPage } from '../pages/login/login';
+import { SignupPage } from '../pages/signup/signup';
 import { HomePage } from '../pages/home/home';
 import { FindtutorPage } from '../pages/findtutor/findtutor';
-
+import { OrderPage } from '../pages/order/order';
+import { ProfilePage } from '../pages/profile/profile';
+import { InfoPage } from '../pages/info/info';
+import { PaymentPage } from '../pages/payment/payment'
+;
 @Component({
+  selector: 'app',
   templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
-  rootPage: any = LoginPage;
+  rootPage: any;
   pages: Array<{title: string, component: any}>;
-  profileData: FirebaseObjectObservable<any>;
+  profileData: any;
   item: any;
+  subPages: any;
 
   constructor(private afAuth: AngularFireAuth, private afDatabase: AngularFireDatabase, private platform: Platform,
      private statusBar: StatusBar, private splashScreen: SplashScreen, private toast: ToastController) {
@@ -27,27 +34,39 @@ export class MyApp {
     this.afAuth.authState.take(1).subscribe(auth => {
       if (auth) {
         this.profileData = this.afDatabase.object(`profile/${auth.uid}`).valueChanges();
+        this.rootPage = OrderPage;
+      }else{
+        this.rootPage = SignupPage;
       }
     });
 
     firebase.auth().onAuthStateChanged(auth => {
       if (auth) {
-        this.rootPage = HomePage;
-        this.toast.create({
-          message: `Success!`,
-          duration: 1000,
-          cssClass: "success"
-        }).present();
+        this.profileData = this.afDatabase.object(`profile/${auth.uid}`).valueChanges();
+        this.rootPage = OrderPage;
+        // this.toast.create({
+        //   message: `Success!`,
+        //   duration: 1000,
+        //   cssClass: "success"
+        // }).present();
       } else {
-        this.rootPage = LoginPage;
+        this.rootPage = SignupPage;
       }
     });
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'Find Tutor', component: FindtutorPage }
+      { title: 'Explore', component: FindtutorPage },
+      { title: 'History', component: FindtutorPage },
+      { title: 'Help', component: ProfilePage },
+      { title: 'Payment', component: PaymentPage },
+      { title: 'Settings', component: ProfilePage },
     ];
+    this.subPages = [
+      { title: 'Become a Tutor', component: FindtutorPage },
+      { title: 'Legal', component: FindtutorPage },
+      { title: 'Contact Us', component: FindtutorPage }
+    ]
 
   }
 
@@ -59,14 +78,17 @@ export class MyApp {
       this.splashScreen.hide();
     });
   }
+  goToInfo(){
+    this.nav.push(InfoPage);
+  }
 
-  signOut(){
-    this.afAuth.auth.signOut()
-  }﻿
+  goToProfile(){
+    this.nav.setRoot(ProfilePage);
+  }
 
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
-    this.nav.setRoot(page.component);
+    this.nav.push(page.component);
   }
 }

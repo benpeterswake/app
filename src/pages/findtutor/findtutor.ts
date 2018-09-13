@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import {HomePage} from '../home/home';
 
 @Component({
   selector: 'page-findtutor',
@@ -12,6 +13,10 @@ export class FindtutorPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad FindtutorPage');
+  }
+
+  goToHome(){
+    this.navCtrl.setRoot(HomePage)
   }
 
 }

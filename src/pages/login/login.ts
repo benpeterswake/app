@@ -41,7 +41,7 @@ export class LoginPage {
   }
 
   goToSignup(){
-    this.navCtrl.push(SignupPage)
+    this.navCtrl.setRoot(SignupPage)
   }
 
 }
