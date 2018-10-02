@@ -8,7 +8,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import firebase from 'firebase/app';
 
 //Pages
-import { HomePage } from '../home/home';
+import { OrderPage } from '../order/order';
 import { LoginPage } from '../login/login';
 
 @Component({
@@ -21,10 +21,12 @@ export class SignupPage {
   autocomplete: any = [];
   profile: any;
   message: any;
+  show: any;
 
   constructor(private http: HttpClient, private afAuth: AngularFireAuth , private afDatabase: AngularFireDatabase, private toast: ToastController, public navCtrl: NavController, public navParams: NavParams) {
     this.user = {};
     this.profile = {};
+    this.show = true;
   }
 
   ionViewDidLoad() {
@@ -50,10 +52,9 @@ export class SignupPage {
          const result = await this.afAuth.auth.createUserWithEmailAndPassword(this.user.email, this.user.password);
          if(result){
          this.afAuth.authState.take(1).subscribe(auth => {
-           this.afDatabase.object(`profile/${auth.uid}`).set(this.profile)
-           .then(() => this.navCtrl.setRoot(HomePage));
+           this.afDatabase.object(`users/${auth.uid}`).set(this.profile)
+           .then(() => this.navCtrl.setRoot(OrderPage));
          });
-          this.navCtrl.push(LoginPage);
         }
      }
      catch(e){
@@ -101,7 +102,7 @@ export class SignupPage {
   changeSlide(direction, validate){
     if(direction){
       if(validate === 2){
-        if(this.profile.full_name && this.profile.email){
+        if(this.profile.first_name && this.user.email){
           this.swipe()
         }else{
           this.toast.create({

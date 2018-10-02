@@ -1,14 +1,17 @@
-<ion-header>
+<!-- <ion-header>
 
   <ion-navbar>
     <ion-title><span style="font-size:20px">Grade Saver</span></ion-title>
   </ion-navbar>
 
-</ion-header>
+</ion-header> -->
 
 
-<ion-content>
-  <ion-slides style="margin-top: -40px;">
+<ion-content no-bounce>
+  <div style="position:absolute; text-align: center; width:100%;" padding>
+    <ion-title *ngIf="show"><span style="font-size:35px"><ion-icon color="primary" name="school"></ion-icon></span></ion-title>
+  </div>
+  <ion-slides style="margin-top: -20px;">
     <!-- slide 0 -->
     <ion-slide class="padding">
       <div class="get-started">
@@ -18,16 +21,33 @@
     </ion-slide>
     <!-- slide 1 -->
     <ion-slide class="padding">
+      <ion-list>
         <h1>Create your account</h1>
-        <ion-item>
-          <ion-label floating>Full Name</ion-label>
-          <ion-input [(ngModel)]="profile.full_name" type="text"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label floating>Email Address</ion-label>
-          <ion-input [(ngModel)]="profile.email" type="email"></ion-input>
-        </ion-item>
-      <button style="margin-top: 25px" ion-button block (click)="changeSlide(true, 2)">Continue</button>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label floating>First Name</ion-label>
+              <ion-input (focus)="show = false"  (focusout)="show = true" [(ngModel)]="profile.first_name" type="text"></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <ion-label floating>Last Name</ion-label>
+              <ion-input [(ngModel)]="profile.last_name" type="text"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label floating>Email Address</ion-label>
+              <ion-input [(ngModel)]="user.email" type="email"></ion-input>
+            </ion-item>
+          </ion-col>
+        <button style="margin-top: 25px" ion-button block (click)="changeSlide(true, 2)">Continue</button>
+    </ion-row>
+  </ion-list>
+
     </ion-slide>
     <!-- slide 2 -->
     <ion-slide class="padding">
@@ -42,6 +62,10 @@
         </ion-item>
       </span>
       <button style="margin-top: 25px" ion-button block (click)="changeSlide(true, 3)">Continue</button>
+      <div padding>
+         <a (click)="changeSlide(false)">Back</a>
+      </div>
+
     </ion-slide>
     <!-- slide 3 -->
     <ion-slide class="padding">

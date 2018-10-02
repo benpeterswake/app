@@ -6,6 +6,7 @@ import firebase from 'firebase/app';
 import * as GeoFire from 'geofire';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import "rxjs/Rx";
+declare var google;
 declare var $;
 
 //Pages
@@ -19,7 +20,6 @@ import { TutorPage } from '../tutor/tutor';
 })
 export class OrderPage {
   @ViewChild('myInput') myInput: TextInput;
-
   message: any;
   items: any;
   hits = new BehaviorSubject([]);
@@ -40,6 +40,9 @@ export class OrderPage {
   lng: number;
   markers: any;
   url: any;
+  styles: any;
+  user: any;
+  map: any;
 
   constructor(public loadingCtrl: LoadingController, private zone: NgZone, public menuCtrl: MenuController, private afAuth: AngularFireAuth, private afDatabase: AngularFireDatabase, public navCtrl: NavController, public navParams: NavParams, private toast: ToastController) {
     this.url = {
@@ -47,14 +50,192 @@ export class OrderPage {
       scaledSize: {
           width: 20,
           height: 20
-        }
+      }
     }
+    this.user = {
+      url:"https://png.pngtree.com/svg/20170401/hm_ico_dot_blue_526715.png",
+      scaledSize: {
+          width: 20,
+          height: 20
+      }
+    }
+    this.styles = [
+      {
+          "featureType": "water",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "hue": "#7fc8ed"
+              },
+              {
+                  "saturation": 55
+              },
+              {
+                  "lightness": -6
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "water",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#7fc8ed"
+              },
+              {
+                  "saturation": 55
+              },
+              {
+                  "lightness": -6
+              },
+              {
+                  "visibility": "off"
+              }
+          ]
+      },
+      {
+          "featureType": "poi.park",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#83cead"
+              },
+              {
+                  "saturation": 1
+              },
+              {
+                  "lightness": -15
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "landscape",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#f3f4f4"
+              },
+              {
+                  "saturation": -84
+              },
+              {
+                  "lightness": 59
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "landscape",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#ffffff"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 100
+              },
+              {
+                  "visibility": "off"
+              }
+          ]
+      },
+      {
+          "featureType": "road",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffffff"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 100
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "road",
+          "elementType": "labels",
+          "stylers": [
+              {
+                  "hue": "#bbbbbb"
+              },
+              {
+                  "saturation": -100
+              },
+              {
+                  "lightness": 26
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "road.arterial",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffcc00"
+              },
+              {
+                  "saturation": 100
+              },
+              {
+                  "lightness": -35
+              },
+              {
+                  "visibility": "simplified"
+              }
+          ]
+      },
+      {
+          "featureType": "road.highway",
+          "elementType": "geometry",
+          "stylers": [
+              {
+                  "hue": "#ffcc00"
+              },
+              {
+                  "saturation": 100
+              },
+              {
+                  "lightness": -22
+              },
+              {
+                  "visibility": "on"
+              }
+          ]
+      },
+      {
+          "featureType": "poi.school",
+          "elementType": "all",
+          "stylers": [
+              {
+                  "visibility": "on"
+              }
+          ]
+      }
+  ]
     this.menuCtrl.enable(true, 'myMenu');
     this.afAuth.authState.take(1).subscribe(auth => {
-      if(auth){
-        this.userID = auth.uid
-      }
-      let profile = firebase.database().ref(`profile/${this.userID}`);
+      if(auth)this.userID = auth.uid
+      let profile = firebase.database().ref(`users/${this.userID}`);
       profile.on("value", (snapshot) => {
         this.profileData = snapshot.val()
       });
@@ -64,7 +245,7 @@ export class OrderPage {
       this.topTutors.push(snapshot.val())
     });
   })
-    this.tutorLocation = firebase.database().ref('/tutors');
+    this.tutorLocation = firebase.database().ref('/tutors/locations');
     this.geoFire = new GeoFire(this.tutorLocation);
     this.dummy = [
       {
@@ -88,28 +269,34 @@ export class OrderPage {
     ]
   }
 
-
   ionViewWillLoad(){
     this.hits.subscribe(hits => this.markers = hits);
     setTimeout(() => {
-      this.setTutorLocation('2', [34.034538399999995,-84.63204629999999])
+      this.setTutorLocation('0', [34.034538399999995,-84.63204629999999])
     }, 6000)
   }
 
   getUserLocation(map: any) {
+    this.map = map;
     if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition(position => {
         this.lat = position.coords.latitude;
         this.lng = position.coords.longitude;
         let latlng = { lat: this.lat+0.004, lng: this.lng }
-        console.log(latlng)
-        map.setCenter(latlng)
-        setTimeout(() => {
-          $("#inputFields").fadeIn("slow", () => {
-            $("#trending").slideDown("slow");
+        let geocoder = new google.maps.Geocoder();
+        geocoder.geocode({'location' : latlng}, (result, status) => {
+          this.zone.run(() => {
+            this.order.location = result[0].formatted_address;
           });
-        }, 800)
+        })
+        map.setCenter(latlng)
         this.getLocations(500, [this.lat, this.lng])
+        $("#inputFields").fadeIn();
+        $("#inputFields").animate({
+          marginTop: 10
+        }, 1500, () => {
+          $("#trending").slideDown("slow");
+        });
       })
     }
   }
@@ -166,7 +353,6 @@ export class OrderPage {
     $('#trending').slideUp()
   }
 
-
   getActiveTutors(){
     let loading = this.loadingCtrl.create({
       spinner: 'dots',
@@ -181,7 +367,7 @@ export class OrderPage {
   }
 
   showMore(){
-    $('#inputFields').animate({padding: "0"});
+    $('#inputFields').animate({padding: "0", marginTop: "0"});
     $('#trending').fadeIn();
     $('#trending').css('border-bottom-width', 0);
     $('#trending').animate({ borderBottomLeftRadius: 0, borderBottomRightRadius: 0});
@@ -199,7 +385,7 @@ export class OrderPage {
   cancel(){
     $('#inputFields').removeClass("top");
     $('#map').css("height", "100%")
-    $('#inputFields').animate({padding: "16"});
+    $('#inputFields').animate({padding: "16", marginTop: "10"});
     $('#trending').css("display", "block");
     $('#trending').css("position", "relative");
     $('#trending').css('border-bottom-width', 10);
@@ -216,7 +402,7 @@ export class OrderPage {
   selectCourse(course){
     $('#inputFields').removeClass("top");
     $('#inputFields').addClass("location");
-    $('#map').css("height", "79%");
+    $('agm-map').css("top", "0px");
     $('#trending').css("display", "none");
     $('#trending').css("position", "absolute");
     $('#prices').hide()
@@ -241,12 +427,12 @@ export class OrderPage {
   }
 
   orderTutor(){
-  try{
-    this.afAuth.authState.take(1).subscribe(auth => {
-      this.order.active = false;
-      this.afDatabase.object(`orders/${auth.uid}`).set(this.order)
-      .then(() => this.navCtrl.setRoot(HomePage));
-    });
+    try{
+      this.afAuth.authState.take(1).subscribe(auth => {
+        this.order.active = false;
+        this.afDatabase.object(`orders/${auth.uid}`).set(this.order)
+        .then(() => this.navCtrl.setRoot(HomePage));
+      });
     }catch(e){
       this.toast.create({
         message: e.message,

@@ -33,7 +33,6 @@ export class MyApp {
     this.initializeApp();
     this.afAuth.authState.take(1).subscribe(auth => {
       if (auth) {
-        this.profileData = this.afDatabase.object(`profile/${auth.uid}`).valueChanges();
         this.rootPage = OrderPage;
       }else{
         this.rootPage = SignupPage;
@@ -42,13 +41,8 @@ export class MyApp {
 
     firebase.auth().onAuthStateChanged(auth => {
       if (auth) {
-        this.profileData = this.afDatabase.object(`profile/${auth.uid}`).valueChanges();
+        this.profileData = this.afDatabase.object(`users/${auth.uid}`).valueChanges();
         this.rootPage = OrderPage;
-        // this.toast.create({
-        //   message: `Success!`,
-        //   duration: 1000,
-        //   cssClass: "success"
-        // }).present();
       } else {
         this.rootPage = SignupPage;
       }

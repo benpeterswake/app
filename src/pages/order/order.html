@@ -9,17 +9,17 @@
     <button ion-button menuToggle (click)="goTutor = false">
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Grade Saver</ion-title>
+    <ion-title>Grade Booster</ion-title>
     <ion-buttons *ngIf="show" (click)="cancel()" end>
       <button ion-button>
          Cancel
       </button>
     </ion-buttons>
-    <ion-buttons end>
+    <!-- <ion-buttons end>
       <button *ngIf="!show" ion-button (click)="goToSearch()">
          <ion-icon name="search"></ion-icon>
       </button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-navbar>
 </ion-header>
 
@@ -56,10 +56,9 @@
 <ion-content id="search" [hidden]="potentialTutors.length" no-bounce>
 
     <div id="inputFields" padding text-center [ngClass]="{'middle': !show}">
-
-        <ion-item class="input-bars" [ngClass]="{'completed': showLocation }" no-lines>
-          <ion-label color="primary"><ion-icon name="school"></ion-icon></ion-label>
-          <ion-input style="font-size:16px; padding: 8px 0px 8px 0px;"  no-lines (focus)="showMore()" (ngModelChange)="getCourses()" placeholder="What course can we help with?" type="text" [(ngModel)]="order.course"></ion-input>
+        <ion-item class="input-bars" [ngClass]="{'addTop': show, 'completed': showLocation }" no-lines>
+          <ion-label color="primary"><ion-icon style="margin-top:3px;" name="search"></ion-icon></ion-label>
+          <ion-input style="font-size:17px; padding: 8px 0px 8px 0px;"  no-lines (focus)="showMore()" (ngModelChange)="getCourses()" placeholder="What course can we help with?" type="text" [(ngModel)]="order.course"></ion-input>
         </ion-item>
 
         <ion-item *ngIf="showLocation" [ngClass]="{'completed': searchForTutor }"  class="input-bars" no-lines>
@@ -88,16 +87,16 @@
           </div>
           <ion-list *ngIf="!show" no-lines style="margin-bottom: 0">
             <button ion-item style="border-bottom: 1px solid #f4f4f4">
-              <ion-icon name="flame" item-start></ion-icon>
+               <ion-icon name="cloud-circle" item-start></ion-icon>
               IS 4160
             </button>
             <button ion-item>
-              <ion-icon name="medical" item-start></ion-icon>
-                Math 3440
+              <ion-icon name="calculator" item-start></ion-icon>
+              Math 3440
             </button>
           </ion-list>
         </div>
-        <ion-item-divider *ngIf="show" style="text-align:left"><span *ngIf="courses.length">Courses</span></ion-item-divider>
+        <ion-item-divider *ngIf="show" style="text-align:left"></ion-item-divider>
 
     </div>
     <div *ngIf="courses.length">
@@ -109,11 +108,11 @@
     </div>
 
     <!-- Generated template for the GoogleMapComponent component -->
-    <div [hidden]="show">
-      <agm-map (mapReady)="getUserLocation($event)" [disableDefaultUI]="true" [zoom]="15">
-        <agm-marker [latitude]="lat" [longitude]="lng">
+    <div [hidden]="show && !showMap">
+      <agm-map (mapReady)="getUserLocation($event)" [streetViewControl]="false" [disableDefaultUI]="true" [zoom]="15" [styles]="styles">
+        <agm-marker [iconUrl]="user" [latitude]="lat" [longitude]="lng">
           <agm-info-window>
-            <h3>Test</h3>
+            <h3>My Location</h3>
           </agm-info-window>
         </agm-marker>
         <agm-marker *ngFor="let marker of markers" [iconUrl]="url" [latitude]="marker.location[0]" [longitude]="marker.location[1]">
@@ -123,7 +122,6 @@
         </agm-marker>
       </agm-map>
     </div>
-
 
     <ion-footer>
       <ion-toolbar *ngIf="showLocation" color="primary">
@@ -262,13 +260,3 @@
     </ion-item>
   </div> -->
 </ion-content>
-<!-- <drawer [options]="drawerOptions">
-    <div class="content">
-      The world is your oyster.
-      <p>
-        If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-      </p>
-    </div>
-</drawer> -->
-
-<!-- drawer menu -->
