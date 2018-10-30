@@ -1,3 +1,51 @@
 page-home {
-
+  agm-map {
+    position: absolute;
+    width: 100vw;
+    height:100%;
+  }
+  .location{
+    padding-top:1%;
+    position: relative;
+  }
+  .middle{
+    display: none;
+    position: absolute;
+    z-index: 4;
+    width:100%;
+    margin-top:1%;
+  }
+  .completed{
+    background: #f9f9f9;
+  }
+  .color {
+    padding-top:9px; padding-bottom: 5px;
+    color: black;
+    border-bottom: 1px solid #f4f4f4!important;
+    background-color: white!important
+  }
+  #inputFields{
+    margin-top: -200px;
+  }
+  #trending{
+    display: none;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
+    border-bottom: 10px solid white;
+    border-bottom-left-radius: 6%;
+    border-bottom-right-radius: 6%;
+  }
+  #map{
+    display: none;
+  }
+  #locate{
+    display: none;
+  }
+  #prices{
+    display: none;
+  }
+  .input-bars{
+    background:white;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
+    z-index:4;
+  }
 }

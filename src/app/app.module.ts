@@ -29,6 +29,7 @@ export const FIREBASE_CRED = env.firebaseConfig;
 
 import { AgmCoreModule } from '@agm/core';
 import { Geolocation } from '@ionic-native/geolocation';
+import { AuthProvider } from '../providers/auth/auth';
 
 @NgModule({
   declarations: [
@@ -77,7 +78,8 @@ import { Geolocation } from '@ionic-native/geolocation';
     File,
     FileChooser,
     FilePath,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    AuthProvider
   ]
 })
 export class AppModule {}

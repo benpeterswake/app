@@ -19,9 +19,9 @@ export class InfoPage {
   email: any;
   constructor(private file: File, private filePath: FilePath, private fileChooser: FileChooser, private afAuth: AngularFireAuth, private afDatabase: AngularFireDatabase, public navCtrl: NavController, public navParams: NavParams) {
     this.afAuth.authState.take(1).subscribe(auth => {
-        this.profileData = this.afDatabase.object(`profile/${auth.uid}`).valueChanges();
+        this.profileData = this.afDatabase.object(`users/${auth.uid}`).valueChanges();
         this.email = auth.email
-        this.updateData = this.afDatabase.object(`profile/${auth.uid}`)
+        this.updateData = this.afDatabase.object(`users/${auth.uid}`)
     });
   }
 

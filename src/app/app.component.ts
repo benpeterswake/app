@@ -31,19 +31,12 @@ export class MyApp {
   constructor(private afAuth: AngularFireAuth, private afDatabase: AngularFireDatabase, private platform: Platform,
      private statusBar: StatusBar, private splashScreen: SplashScreen, private toast: ToastController) {
     this.initializeApp();
-    this.afAuth.authState.take(1).subscribe(auth => {
-      if (auth) {
-        this.rootPage = OrderPage;
-      }else{
-        this.rootPage = SignupPage;
-      }
-    });
-
     firebase.auth().onAuthStateChanged(auth => {
       if (auth) {
         this.profileData = this.afDatabase.object(`users/${auth.uid}`).valueChanges();
-        this.rootPage = OrderPage;
+        this.rootPage = HomePage;
       } else {
+        this.profileData = null;
         this.rootPage = SignupPage;
       }
     });
@@ -66,6 +59,13 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      this.afAuth.authState.take(1).subscribe(auth => {
+        if (auth) {
+          this.rootPage = HomePage;
+        }else{
+          this.rootPage = SignupPage;
+        }
+      });
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
