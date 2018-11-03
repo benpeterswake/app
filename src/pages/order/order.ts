@@ -20,7 +20,38 @@ import { TutorPage } from '../tutor/tutor';
 })
 export class OrderPage {
 
-  constructor() {
+  tutors: any = [];
+
+  constructor(public navCtrl: NavController,  public navParams: NavParams,) {
+    console.log(this.navParams.get('tutors'));
+    
+    this.tutors = this.navParams.get('tutors');
   }
+
+  viewTutor(tutor) {
+    this.navCtrl.push(TutorPage, {
+      tutor: tutor
+    })
+  }
+
+  cancel() {
+    this.navCtrl.setRoot(HomePage)
+  }
+
+  // orderTutor(){
+  //   try{
+  //     this.afAuth.authState.take(1).subscribe(auth => {
+  //       this.order.active = false;
+  //       this.afDatabase.object(`orders/${auth.uid}`).set(this.order)
+  //       .then(() => this.navCtrl.setRoot(HomePage));
+  //     });
+  //   } catch(e) {
+  //     this.toast.create({
+  //       message: e.message,
+  //       duration: 2500,
+  //       cssClass: "error"
+  //     }).present();
+  //   }
+  // }
 
 }

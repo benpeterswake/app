@@ -39,8 +39,8 @@ export class HomePage {
   showMap: any = true;
   goTutor: any = false;
   userID: any;
-  potentialTutors: any = [];
   trendingCourses: any = [];
+  tutors: any = [];
   lat: number;
   lng: number;
   markers: any;
@@ -279,7 +279,7 @@ export class HomePage {
     ]
   }
 
-  ionViewWillLoad(){
+  ionViewDidLoad(){
     this.initLoad = true;
     this.hits.subscribe(hits => this.markers = hits);
     setTimeout(() => {
@@ -377,6 +377,9 @@ export class HomePage {
     })
   }
 
+  viewTutor(tutor){
+    this.navCtrl.push(TutorPage, {tutor})
+  }
 
   presentLoading() {
    let loading = this.loadingCtrl.create({
@@ -402,8 +405,7 @@ export class HomePage {
     firebase.database().ref("tutors/profiles").orderByChild("school").equalTo(this.profileData.school).on("child_added", (snapshot) => {
       loading.dismiss();
       if(snapshot.val().certifications.includes(this.order.course) && snapshot.val().active){
-        this.potentialTutors.push(snapshot.val());
-        this.navCtrl.setRoot(OrderPage)
+        this.tutors.push(snapshot.val());
       }
     });
   }
@@ -414,16 +416,15 @@ export class HomePage {
 
   expandAnimation() {
     $('#inputFields').animate({padding: "0", marginTop: "0"});
+  }
+
+  showMore(){
+    this.expandAnimation();
     $('#trending').fadeIn();
     $('#trending').css('border-bottom-width', 0);
     $('#trending').css("display", "block");
     $('#trending').css("position", "relative");
     $('#trending').animate({ borderBottomLeftRadius: 0, borderBottomRightRadius: 0});
-  }
-
-  showMore(){
-    this.expandAnimation();
-    $('#prices').slideDown();
     this.order.course = null;
     this.show = true;
     this.showMap = false;
@@ -431,31 +432,26 @@ export class HomePage {
   }
 
   cancel(){
-    $('#inputFields').removeClass("top");
     $('#map').css("height", "100%")
     $('#inputFields').animate({padding: "16", marginTop: "10"});
     $('#trending').css("display", "block");
     $('#trending').css("position", "relative");
     $('#trending').css('border-bottom-width', 10);
-    $('#trending').animate({ borderBottomLeftRadius: "6%", borderBottomRightRadius: "6%"})
-    $('#prices').fadeOut()
-    this.potentialTutors = [];
+    $('#trending').animate({ borderBottomLeftRadius: "6%", borderBottomRightRadius: "6%"});
+    this.tutors = [];
     this.show = false;
     this.showMap = true;
     this.showLocation = false;
     this.courses = [];
     this.order.course = null;
-    this.map.panTo({ lat: this.lat+0.004, lng: this.lng })
-    this.map.setZoom(15)
+    this.reCenter();
   }
 
   selectCourse(course){
-    $('#inputFields').removeClass("top");
     $('#inputFields').addClass("location");
     $('agm-map').css("top", "0px");
     $('#trending').css("display", "none");
     $('#trending').css("position", "absolute");
-    $('#prices').hide()
     this.order.course = course.name
     this.courses = [];
     this.show = true;
@@ -465,33 +461,4 @@ export class HomePage {
     this.map.setZoom(18)
   }
 
-  setLocation(){
-    this.getActiveTutors();
-  }
-
-  goToSearch(){
-    this.goTutor = false;
-    this.navCtrl.push(FindtutorPage)
-  }
-
-  goToTutor(tutor){
-    this.goTutor = true;
-    this.navCtrl.push(TutorPage, { tutor: tutor })
-  }
-
-  orderTutor(){
-    try{
-      this.afAuth.authState.take(1).subscribe(auth => {
-        this.order.active = false;
-        this.afDatabase.object(`orders/${auth.uid}`).set(this.order)
-        .then(() => this.navCtrl.setRoot(HomePage));
-      });
-    }catch(e){
-      this.toast.create({
-        message: e.message,
-        duration: 2500,
-        cssClass: "error"
-      }).present();
-    }
-  }
 }

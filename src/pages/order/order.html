@@ -10,24 +10,142 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Your Matches</ion-title>
+    <ion-buttons (click)="cancel()" end>
+      <button ion-button>
+         Cancel
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding no-bounce>
-    <ion-card>
-      <ion-item >
+  
+  <!-- <div id="drawer-inner" style=" background: #f9f9f9; position: absolute; top:85%">
+
+    <div *ngIf="!top" text-center style="background:#5AD9A4; color:#39414E"  (click)="slide()">
+      <ion-icon name="arrow-up" *ngIf="!showDrawer"></ion-icon>
+      <ion-icon name="arrow-down" *ngIf="showDrawer"></ion-icon>
+    </div>
+
+    <ion-item (click)="slide()" style="" padding no-lines style="background:#39414E; color:white;">
+      <ion-icon item-start name="star"></ion-icon>
+      <h1>Top Tutors This Week</h1>
+      <h5>{{profileData?.school}}</h5>
+    </ion-item>
+
+    <ion-card *ngFor="let tutor of topTutors; let i = index">
+      <ion-item (click)="goToTutor(tutor)">
        <ion-avatar item-start>
          <img src="https://i1.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1">
        </ion-avatar>
-       <h2>benjamin Peters</h2>
-       <p>4.9<ion-icon name="star"></ion-icon></p>
-       <ion-badge style="background: gold;" item-end></ion-badge>
+       <h2>{{tutor.first_name}} {{tutor.last_name}}</h2>
+       <p>{{tutor.rating}} <ion-icon name="star"></ion-icon></p>
+       <ion-badge *ngIf="i === 0" style="background: gold;" item-end>
+         <ion-icon name="trophy"></ion-icon> {{tutor.rank}}</ion-badge>
+       <ion-badge *ngIf="i === 1" style="background: silver;" item-end>
+         <ion-icon name="trophy"></ion-icon> {{tutor.rank}}</ion-badge>
+       <ion-badge *ngIf="i === 2" style="background: brown;" item-end>
+         <ion-icon name="trophy"></ion-icon> {{tutor.rank}}</ion-badge>
       </ion-item>
-      <ion-card-content >
+      <ion-card-content (click)="goToTutor(tutor)">
         <p>
           The most popular industrial group ever, and largely
           responsible for bringing the music to a mass audience.
         </p>
       </ion-card-content>
     </ion-card>
-</ion-content>
+
+    <ion-item padding no-lines color="primary">
+    <ion-icon item-start name="school"></ion-icon>
+    <h1>Trending Courses</h1>
+    <h5>{{profileData?.school}}</h5>
+    </ion-item>
+
+    <ion-list no-lines style="margin-bottom:0">
+    <button ion-item>
+      <ion-icon name="flame" item-start></ion-icon>
+      IS 4160
+    </button>
+
+    <button ion-item>
+      <ion-icon name="medical" item-start></ion-icon>
+      Hospital
+    </button>
+
+    <button ion-item>
+      <ion-icon name="cafe" item-start></ion-icon>
+      Cafe
+    </button>
+
+    <button ion-item>
+      <ion-icon name="paw" item-start></ion-icon>
+      Dog Park
+    </button>
+
+    <button ion-item>
+      <ion-icon name="beer" item-start></ion-icon>
+      Pub
+    </button>
+
+    <button ion-item>
+      <ion-icon name="planet" item-start></ion-icon>
+      Space
+    </button>
+    </ion-list>
+
+    <ion-item padding no-lines color="primary">
+    <ion-icon item-start name="pricetags"></ion-icon>
+    <h1>Best Prices!</h1>
+    <h5>{{profileData?.school}}</h5>
+    </ion-item>
+    <ion-card>
+    <ion-item>
+     <ion-avatar item-start>
+       <img src="https://i1.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1">
+     </ion-avatar>
+     <h2>Marty McFly</h2>
+     <p>Rating: 4.8</p>
+    </ion-item>
+    <ion-card-content>
+      <p>
+        The most popular industrial group ever, and largely
+        responsible for bringing the music to a mass audience.
+      </p>
+    </ion-card-content>
+    </ion-card>
+    <ion-card>
+    <ion-item>
+     <ion-avatar item-start>
+       <img src="img/marty-avatar.png">
+     </ion-avatar>
+     <h2>Marty McFly</h2>
+     <p>Rating: 4.8</p>
+    </ion-item>
+    <ion-card-content>
+      <p>
+        The most popular industrial group ever, and largely
+        responsible for bringing the music to a mass audience.
+      </p>
+    </ion-card-content>
+    </ion-card>
+    <ion-card>
+    <ion-item>
+     <ion-avatar item-start>
+       <img src="img/marty-avatar.png">
+     </ion-avatar>
+     <h2>Marty McFly</h2>
+     <p>Rating: 4.8</p>
+    </ion-item>
+    <ion-card-content>
+      <p>
+        The most popular industrial group ever, and largely
+        responsible for bringing the music to a mass audience.
+      </p>
+    </ion-card-content>
+    </ion-card>
+
+    <ion-item padding center no-lines style="background:#39414E; color:white;">
+    <ion-icon name="ionic"></ion-icon>
+    <h1>Grade Up</h1>
+    <h5>Copyright 2018</h5>
+    </ion-item>
+  </div> -->
