@@ -8,13 +8,6 @@ page-home {
     padding-top:1%;
     position: relative;
   }
-  .middle{
-    display: none;
-    position: absolute;
-    z-index: 4;
-    width:100%;
-    margin-top:1%;
-  }
   .completed{
     background: #f9f9f9;
   }
@@ -25,12 +18,16 @@ page-home {
     background-color: white!important
   }
   #inputFields{
-    margin-top: -200px;
+    display: block;
+    position: absolute;
+    z-index: 1000;
+    width:100%;
+    top: -40%;
   }
   #trending{
     display: none;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
-    border-bottom: 10px solid white;
+    border-bottom: 5px solid white;
     border-bottom-left-radius: 6%;
     border-bottom-right-radius: 6%;
   }
@@ -47,5 +44,22 @@ page-home {
     background:white;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
     z-index:4;
+  }
+  .centerButton {
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
+    display: inline-block;
+    padding: 0;
+    font-size: 12px;
+    font-weight: lighter !important;
+    line-height: 50px;
+    color: #fff !important;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    background-color: #d73d33;
+    border-radius:50px;
+    position: relative;
+    height: 45px;
+    width: 45px;
   }
 }

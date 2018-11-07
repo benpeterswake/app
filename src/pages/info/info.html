@@ -7,9 +7,9 @@
 </ion-header>
 
 <ion-content>
-  <ion-list>
+  <ion-list> 
     <ion-item style="padding-top:20px" (click)="choosePhoto()" no-lines>
-        <img style="width:20%" src="https://i1.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1">
+        <img style="width:20%" [src]="userImage">
     </ion-item>
     <ion-item>
       <ion-label floating>First name</ion-label>

@@ -13,27 +13,22 @@ import firebase from 'firebase/app';
 @Injectable()
 export class AuthProvider {
 
-  userID: any;
+  user: any;
   profileData: any;
 
   constructor(public http: HttpClient, private afAuth: AngularFireAuth,) {
+    this.user = firebase.auth().currentUser; 
     console.log('Hello AuthProvider Provider');
   }
 
   getProfileData() {
     return new Promise( resolve => {
-      this.afAuth.authState.take(1).subscribe(auth => {
-        if(auth)this.userID = auth.uid
-        let profile = firebase.database().ref(`users/${this.userID}`);
-        profile.on("value", (snapshot) => {
-          this.profileData = snapshot.val()
-          resolve(this.profileData);
-        });
-      })
+      let profile = firebase.database().ref(`users/${this.user.uid}`);
+      profile.on("value", (snapshot) => {
+        this.profileData = snapshot.val()
+        resolve(this.profileData);
+      });
     })
-
   }
-
-
 
 }

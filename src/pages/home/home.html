@@ -3,7 +3,8 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Grade Booster</ion-title>
+    <ion-title *ngIf="!tutors.length">Grade Booster</ion-title>
+    <ion-title *ngIf="tutors.length">Your Matches</ion-title>
     <ion-buttons *ngIf="show" (click)="cancel()" end>
       <button ion-button>
          Cancel
@@ -13,8 +14,9 @@
 </ion-header>
 
 <ion-content id="search" no-bounce>
+  <!-- matched tutors -->
   <div *ngIf="tutors.length">
-    <ion-card *ngFor="let tutor of tutors" (click)="viewTutor(tutor)">
+    <ion-card *ngFor="let tutor of tutors">
       <ion-item>
         <ion-avatar item-start>
           <img src="https://i1.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1">
@@ -28,12 +30,31 @@
           The most popular industrial group ever, and largely
           responsible for bringing the music to a mass audience.
         </p>
+        <ion-row>
+          <ion-col align-self-start>
+            <div style="text-align:center">
+              <button ion-button>
+                Order Now
+              </button>
+            </div>
+          </ion-col>
+          <ion-col align-self-end>
+            <div style="text-align:center">
+              <button (click)="viewTutor(tutor)" ion-button>
+                View Profile
+              </button>
+            </div>
+          </ion-col>
+        </ion-row>
       </ion-card-content>
     </ion-card>    
   </div>
-  <div [hidden]="tutors.length" >
-      <div id="inputFields" padding text-center [ngClass]="{'middle': !show}">
-          <ion-item class="input-bars" [ngClass]="{'addTop': show, 'completed': showLocation }" no-lines>
+
+  <!-- home screen with maps -->
+  <div [hidden]="tutors.length">
+      <div id="inputFields" padding text-center>
+          <!-- input fields -->
+          <ion-item class="input-bars" [ngClass]="{'completed': showLocation }" no-lines>
             <ion-label color="primary"><ion-icon style="margin-top:3px;" name="search"></ion-icon></ion-label>
             <ion-input style="font-size:17px; padding: 8px 0px 8px 0px;"  no-lines (ionFocus)="showMore()" (ngModelChange)="getCourses()" placeholder="What course can we help with?" type="text" [(ngModel)]="order.course"></ion-input>
           </ion-item>
@@ -42,7 +63,8 @@
             <ion-label color="primary"><ion-icon name="navigate"></ion-icon></ion-label>
             <ion-input style="font-size:15px; padding: 5px 0px 5px 0px;" no-lines placeholder="Set Location" type="text" [(ngModel)]="order.location"></ion-input>
           </ion-item>
-    
+          
+          <!-- trending drop down -->
           <div [hidden]="courses.length" id="trending">
             <ion-item [ngClass]="{'color': show}" no-lines color="primary">
               <!-- <ion-icon *ngIf="!show" (click)="hideTrending()" name="remove-circle" item-end></ion-icon> -->
@@ -68,19 +90,25 @@
           </div>
           <ion-item-divider *ngIf="show" style="text-align:left"></ion-item-divider>
         </div>
-        <div *ngIf="courses.length">
+
+        <!-- course list -->
+        <div style="margin-top:90px" *ngIf="courses.length">
           <ion-list no-lines>
             <button style="z-index:2" ion-item *ngFor="let course of courses" (click)="selectCourse(course)">
                   {{course?.name}}
             </button>
           </ion-list>
         </div>
+
         <!-- Generated template for the GoogleMapComponent component -->
         <div *ngIf="showLocation" style="position: fixed; z-index:1; top:48%; left: 50%; transform: translateX(-50%);">
           <img width="35px" src="https://mbtskoudsalg.com/images/push-pin-icon-png-5.png" alt="">
         </div>
+        <ion-fab id="centerBtn" *ngIf="offCenter" (click)="reCenter()"  style="bottom: 6%" right bottom>
+          <button ion-fab><ion-icon name="locate"></ion-icon></button>
+        </ion-fab>         
         <div [hidden]="show && !showMap">
-          <agm-map (mapReady)="getUserLocation($event)" [streetViewControl]="false" [disableDefaultUI]="true" [zoom]="15" [styles]="styles">
+          <agm-map #AgmMap (pan)="fadeInCenterBtn()" [zoomControl]=false [streetViewControl]="false" [disableDefaultUI]="true" [zoom]="15" [styles]="styles">
             <agm-marker [iconUrl]="user" [latitude]="lat" [longitude]="lng">
               <agm-info-window>
                 <h3>My Location</h3>
@@ -93,7 +121,9 @@
             </agm-marker>
           </agm-map>
         </div>
-        <ion-footer (click)="getActiveTutors()">
+
+        <!-- footer -->
+        <ion-footer (click)="setMeetUpLocation()">
           <ion-toolbar style="height: 80px" *ngIf="showLocation" color="primary">
             <ion-title>Set meet up location</ion-title>
           </ion-toolbar>

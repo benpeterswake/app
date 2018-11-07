@@ -7,11 +7,9 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import * as firebase from 'firebase';
 
 //Pages
-import { LoginPage } from '../pages/login/login';
 import { SignupPage } from '../pages/signup/signup';
 import { HomePage } from '../pages/home/home';
 import { FindtutorPage } from '../pages/findtutor/findtutor';
-import { OrderPage } from '../pages/order/order';
 import { ProfilePage } from '../pages/profile/profile';
 import { InfoPage } from '../pages/info/info';
 import { PaymentPage } from '../pages/payment/payment'

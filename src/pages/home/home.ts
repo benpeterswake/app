@@ -4,16 +4,17 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AuthProvider } from '../../providers/auth/auth';
 import firebase from 'firebase/app';
+import 'firebase/database'
 import * as GeoFire from 'geofire';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import mapTheme from '../../theme/mapTheme.json';
 import "rxjs/Rx";
 declare var google;
 declare var $;
 
 //Pages
-import { OrderPage } from '../order/order';
-import { FindtutorPage } from '../findtutor/findtutor';
 import { TutorPage } from '../tutor/tutor';
+import { AgmMap } from '@agm/core';
 
 
 @Component({
@@ -22,7 +23,7 @@ import { TutorPage } from '../tutor/tutor';
 })
 export class HomePage {
   @ViewChild('myInput') myInput: TextInput;
-  @ViewChild(Content)
+  @ViewChild('AgmMap') agmMap: AgmMap;
   content: Content;
   message: any;
   items: any;
@@ -33,10 +34,11 @@ export class HomePage {
   tutorLocation: any;
   order: any = {};
   show: any = false;
-  dummy: any = [];
-  courses: any = [];
   showLocation: any = false;
   showMap: any = true;
+  showInputs: any = true;
+  dummy: any = [];
+  courses: any = [];
   goTutor: any = false;
   userID: any;
   trendingCourses: any = [];
@@ -47,7 +49,9 @@ export class HomePage {
   url: any;
   styles: any;
   user: any;
-  map: any;
+  map:any;
+  id: any;
+  offCenter: Boolean = false;
   initLoad: Boolean = true;
 
   constructor(public loadingCtrl: LoadingController, private zone: NgZone, public menuCtrl: MenuController,
@@ -67,179 +71,7 @@ export class HomePage {
           height: 30
       }
     }
-    this.styles = [
-      {
-          "featureType": "water",
-          "elementType": "all",
-          "stylers": [
-              {
-                  "hue": "#7fc8ed"
-              },
-              {
-                  "saturation": 55
-              },
-              {
-                  "lightness": -6
-              },
-              {
-                  "visibility": "on"
-              }
-          ]
-      },
-      {
-          "featureType": "water",
-          "elementType": "labels",
-          "stylers": [
-              {
-                  "hue": "#7fc8ed"
-              },
-              {
-                  "saturation": 55
-              },
-              {
-                  "lightness": -6
-              },
-              {
-                  "visibility": "off"
-              }
-          ]
-      },
-      {
-          "featureType": "poi.park",
-          "elementType": "geometry",
-          "stylers": [
-              {
-                  "hue": "#83cead"
-              },
-              {
-                  "saturation": 1
-              },
-              {
-                  "lightness": -15
-              },
-              {
-                  "visibility": "on"
-              }
-          ]
-      },
-      {
-          "featureType": "landscape",
-          "elementType": "geometry",
-          "stylers": [
-              {
-                  "hue": "#f3f4f4"
-              },
-              {
-                  "saturation": -84
-              },
-              {
-                  "lightness": 59
-              },
-              {
-                  "visibility": "on"
-              }
-          ]
-      },
-      {
-          "featureType": "landscape",
-          "elementType": "labels",
-          "stylers": [
-              {
-                  "hue": "#ffffff"
-              },
-              {
-                  "saturation": -100
-              },
-              {
-                  "lightness": 100
-              },
-              {
-                  "visibility": "off"
-              }
-          ]
-      },
-      {
-          "featureType": "road",
-          "elementType": "geometry",
-          "stylers": [
-              {
-                  "hue": "#ffffff"
-              },
-              {
-                  "saturation": -100
-              },
-              {
-                  "lightness": 100
-              },
-              {
-                  "visibility": "on"
-              }
-          ]
-      },
-      {
-          "featureType": "road",
-          "elementType": "labels",
-          "stylers": [
-              {
-                  "hue": "#bbbbbb"
-              },
-              {
-                  "saturation": -100
-              },
-              {
-                  "lightness": 26
-              },
-              {
-                  "visibility": "on"
-              }
-          ]
-      },
-      {
-          "featureType": "road.arterial",
-          "elementType": "geometry",
-          "stylers": [
-              {
-                  "hue": "#ffcc00"
-              },
-              {
-                  "saturation": 100
-              },
-              {
-                  "lightness": -35
-              },
-              {
-                  "visibility": "simplified"
-              }
-          ]
-      },
-      {
-          "featureType": "road.highway",
-          "elementType": "geometry",
-          "stylers": [
-              {
-                  "hue": "#ffcc00"
-              },
-              {
-                  "saturation": 100
-              },
-              {
-                  "lightness": -22
-              },
-              {
-                  "visibility": "on"
-              }
-          ]
-      },
-      {
-          "featureType": "poi.school",
-          "elementType": "all",
-          "stylers": [
-              {
-                  "visibility": "on"
-              }
-          ]
-      }
-  ]
+    this.styles = mapTheme.style;
     this.menuCtrl.enable(true, 'myMenu');
     this.authProvider.getProfileData().then((data) => {
         this.profileData = data;
@@ -281,56 +113,80 @@ export class HomePage {
 
   ionViewDidLoad(){
     this.initLoad = true;
+    this.agmMap.mapReady.subscribe(map => {
+        console.log(map);
+        this.map = map;
+        this.getUserLocation();
+    })
     this.hits.subscribe(hits => this.markers = hits);
-    setTimeout(() => {
-      this.setTutorLocation('0', [34.036838399999995,-84.63204629999999])
-    }, 6000)
-    setTimeout(() => {
-      this.setTutorLocation('0', [34.036748399999995,-84.63204629999999])
-    }, 7000)
-    setTimeout(() => {
-      this.setTutorLocation('0', [34.036658399999995,-84.63204629999999])
-    }, 8000)
-    setTimeout(() => {
-      this.setTutorLocation('0', [34.036568399999995,-84.63204629999999])
-    }, 9000)
-    setTimeout(() => {
-      this.setTutorLocation('0', [34.036478399999995,-84.63204629999999])
-    }, 10000)
-    setTimeout(() => {
-      this.setTutorLocation('0', [34.036388399999995,-84.63204629999999])
-    }, 11000)
+    let value1 = 34.036838399999995
+    let value2 = -84.63204629999999
+    // for(let i=0; i<50; i++){
+    //   setTimeout(() => {
+    //     this.setTutorLocation('0', [value1+=0.00003, value2+=0.00003])
+    //   }, i*2000)
+    // }
   }
 
   reCenter(){
+    this.offCenter = false;
     this.map.panTo({ lat: this.lat+0.004, lng: this.lng })
     this.map.setZoom(15)
   }
 
-  getUserLocation(map: any) {
-    this.map = map;
-    navigator.geolocation.watchPosition(position => {
+  fadeInCenterBtn() {
+    this.offCenter = true;
+    $("#centerBtn").fadeIn();
+  }
+
+  getUserLocation() {
+    let options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+    navigator.geolocation.getCurrentPosition(position => {
       this.lat = position.coords.latitude;
       this.lng = position.coords.longitude;
-      let latLngOffSet = { lat: this.lat+0.004, lng: this.lng }
       let latlng = { lat: this.lat, lng: this.lng }
-      let geocoder = new google.maps.Geocoder();
-      geocoder.geocode({'location' : latlng}, (result, status) => {
-        this.zone.run(() => {
-          this.order.location = result[0].formatted_address;
-        });
-      })
-      map.setCenter(latLngOffSet)
-      if(this.initLoad) {
-        this.getLocations(500, [this.lat, this.lng])
-        $("#inputFields").fadeIn();
-        $("#inputFields").animate({
-          marginTop: 10
-        }, 1500, () => {
-          $("#trending").slideDown("slow");
-        });
-        this.initLoad = false;
-      }
+      this.getAddress(latlng)
+      this.reCenter()
+      this.getTutorLocations(500, [this.lat, this.lng])
+      this.updateTutorLocation(500, [this.lat, this.lng])  
+      $("#inputFields").animate({
+        top: '1%'
+      }, 1800, () => {
+        $("#trending").slideDown("slow");
+      });
+      this.initLoad = false;
+      this.watchUserLocation();
+    }, (error) => {
+      console.log(error);
+    }, options)
+  }
+
+  watchUserLocation() {
+    let options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    };
+    navigator.geolocation.getCurrentPosition(position => {
+      this.lat = position.coords.latitude;
+      this.lng = position.coords.longitude;
+      let latlng = { lat: this.lat, lng: this.lng }
+      this.getAddress(latlng)
+    }, (error) => {
+      console.log(error);
+    }, options)
+  }
+
+  getAddress(latlng) {
+    let geocoder = new google.maps.Geocoder();
+    geocoder.geocode({'location' : latlng}, (result) => {
+      this.zone.run(() => {
+        this.order.location = result[0].formatted_address;
+      });
     })
   }
 
@@ -340,7 +196,7 @@ export class HomePage {
       .catch((err) => console.log(err))
   }
 
-  getLocations(radius: number, coords: Array<number>){
+  getTutorLocations(radius: number, coords: Array<number>){
     this.geoFire.query({
       center: coords,
       radius: radius
@@ -356,10 +212,9 @@ export class HomePage {
       currentHits.push(hit);
       this.hits.next(currentHits);
     })
-    this.updateLocation(radius, coords)
   }
 
-  updateLocation(radius: number, coords: Array<number>) {
+  updateTutorLocation(radius: number, coords: Array<number>) {
     this.geoFire.query({
       center: coords,
       radius: radius
@@ -370,7 +225,6 @@ export class HomePage {
         location: location,
         distance: distance
       }
-
       var elementPos = this.hits.value.map(function(x) {return x.key; }).indexOf(key);
       this.hits.value[elementPos] = hit;
       console.log(this.hits)
@@ -378,7 +232,7 @@ export class HomePage {
   }
 
   viewTutor(tutor){
-    this.navCtrl.push(TutorPage, {tutor})
+    this.navCtrl.push(TutorPage, {tutor: tutor, order: this.order})
   }
 
   presentLoading() {
@@ -386,28 +240,33 @@ export class HomePage {
      spinner: 'dots',
    });
    loading.present();
-
    // NOTE: remove this
    setTimeout(() => {
      loading.dismiss();
    }, 5000);
   }
 
-  hideTrending(){
-    $('#trending').slideUp()
-  }
-
   getActiveTutors(){
+    let load = false;
+    this.tutors = [];
     let loading = this.loadingCtrl.create({
       spinner: 'dots',
     });
     loading.present();
     firebase.database().ref("tutors/profiles").orderByChild("school").equalTo(this.profileData.school).on("child_added", (snapshot) => {
-      loading.dismiss();
       if(snapshot.val().certifications.includes(this.order.course) && snapshot.val().active){
         this.tutors.push(snapshot.val());
+        if(!load) {
+          loading.dismiss();
+          load = true;
+        }
       }
     });
+  }
+
+  setMeetUpLocation() {
+    this.order.location = this.map.getCenter();
+    this.getActiveTutors();
   }
 
   getCourses(){
@@ -415,7 +274,7 @@ export class HomePage {
   }
 
   expandAnimation() {
-    $('#inputFields').animate({padding: "0", marginTop: "0"});
+    $('#inputFields').animate({padding: "0", top: "0"});
   }
 
   showMore(){
@@ -433,7 +292,7 @@ export class HomePage {
 
   cancel(){
     $('#map').css("height", "100%")
-    $('#inputFields').animate({padding: "16", marginTop: "10"});
+    $('#inputFields').animate({padding: "16", top: "1%"});
     $('#trending').css("display", "block");
     $('#trending').css("position", "relative");
     $('#trending').css('border-bottom-width', 10);
