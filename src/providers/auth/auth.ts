@@ -12,11 +12,10 @@ import firebase from 'firebase/app';
 */
 @Injectable()
 export class AuthProvider {
-
   user: any;
   profileData: any;
 
-  constructor(public http: HttpClient, private afAuth: AngularFireAuth,) {
+  constructor(public http: HttpClient, private afAuth: AngularFireAuth) {
     this.user = firebase.auth().currentUser; 
     console.log('Hello AuthProvider Provider');
   }
@@ -30,5 +29,4 @@ export class AuthProvider {
       });
     })
   }
-
 }

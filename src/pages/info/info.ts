@@ -12,7 +12,6 @@ import * as firebase from 'firebase';
   templateUrl: 'info.html',
 })
 export class InfoPage {
-
   profileData: any;
   updateData: any;
   userImage: any;
@@ -73,7 +72,6 @@ export class InfoPage {
       alert('Uploaded a base64 string!');
       this.getPhoto();
     }, (err) => alert(err));
-
     // if(profile.first_name && profile.last_name && profile.school){
     //   this.updateData.update(profile)
     //   if(this.email){

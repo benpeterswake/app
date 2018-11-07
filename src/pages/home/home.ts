@@ -57,6 +57,7 @@ export class HomePage {
   constructor(public loadingCtrl: LoadingController, private zone: NgZone, public menuCtrl: MenuController,
     private afAuth: AngularFireAuth, private afDatabase: AngularFireDatabase, public navCtrl: NavController,
     public navParams: NavParams, private toast: ToastController, private authProvider: AuthProvider) {
+          
     this.url = {
       url:"https://cdn.bocatutor.me/icons/tutor-icon-set/textbooks.png",
       scaledSize: {
@@ -140,29 +141,31 @@ export class HomePage {
   }
 
   getUserLocation() {
-    let options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0
-    };
-    navigator.geolocation.getCurrentPosition(position => {
-      this.lat = position.coords.latitude;
-      this.lng = position.coords.longitude;
-      let latlng = { lat: this.lat, lng: this.lng }
-      this.getAddress(latlng)
-      this.reCenter()
-      this.getTutorLocations(500, [this.lat, this.lng])
-      this.updateTutorLocation(500, [this.lat, this.lng])  
-      $("#inputFields").animate({
-        top: '1%'
-      }, 1800, () => {
-        $("#trending").slideDown("slow");
-      });
-      this.initLoad = false;
-      this.watchUserLocation();
-    }, (error) => {
-      console.log(error);
-    }, options)
+
+      let options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      };
+      navigator.geolocation.getCurrentPosition(position => {
+        this.lat = position.coords.latitude;
+        this.lng = position.coords.longitude;
+        let latlng = { lat: this.lat, lng: this.lng }
+        this.getAddress(latlng)
+        this.reCenter()
+        this.getTutorLocations(500, [this.lat, this.lng])
+        this.updateTutorLocation(500, [this.lat, this.lng]) 
+        $('#trending').removeAttr("style"); 
+        $("#inputFields").animate({
+          top: '1%'
+        }, 1800, () => {
+          $("#trending").slideDown("slow");
+        });
+        this.initLoad = false;
+        this.watchUserLocation();
+      }, (error) => {
+        console.log(error);
+      }, options);
   }
 
   watchUserLocation() {
@@ -277,13 +280,17 @@ export class HomePage {
     $('#inputFields').animate({padding: "0", top: "0"});
   }
 
+  alterTrending(border, left, right) {
+    $('#trending').css("display", "block");
+    $('#trending').css("position", "relative");
+    $('#trending').css('border-bottom-width', border);
+    $('#trending').animate({ borderBottomLeftRadius: left, borderBottomRightRadius: right});
+  }
+
   showMore(){
     this.expandAnimation();
     $('#trending').fadeIn();
-    $('#trending').css('border-bottom-width', 0);
-    $('#trending').css("display", "block");
-    $('#trending').css("position", "relative");
-    $('#trending').animate({ borderBottomLeftRadius: 0, borderBottomRightRadius: 0});
+    this.alterTrending(0, 0, 0);
     this.order.course = null;
     this.show = true;
     this.showMap = false;
@@ -293,10 +300,7 @@ export class HomePage {
   cancel(){
     $('#map').css("height", "100%")
     $('#inputFields').animate({padding: "16", top: "1%"});
-    $('#trending').css("display", "block");
-    $('#trending').css("position", "relative");
-    $('#trending').css('border-bottom-width', 10);
-    $('#trending').animate({ borderBottomLeftRadius: "6%", borderBottomRightRadius: "6%"});
+    this.alterTrending(10, "6%", "6%");
     this.tutors = [];
     this.show = false;
     this.showMap = true;
@@ -305,6 +309,7 @@ export class HomePage {
     this.order.course = null;
     this.reCenter();
   }
+
 
   selectCourse(course){
     $('#inputFields').addClass("location");
