@@ -4,6 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { AuthProvider } from '../providers/auth/auth';
 import * as firebase from 'firebase';
 
 //Pages
@@ -25,8 +26,9 @@ export class MyApp {
   profileData: any;
   item: any;
   subPages: any;
+  userImage: any;
 
-  constructor(private afAuth: AngularFireAuth, private afDatabase: AngularFireDatabase, private platform: Platform,
+  constructor(private auth: AuthProvider, private afAuth: AngularFireAuth, private afDatabase: AngularFireDatabase, private platform: Platform,
      private statusBar: StatusBar, private splashScreen: SplashScreen, private toast: ToastController) {
     this.initializeApp();
     firebase.auth().onAuthStateChanged(auth => {
@@ -38,7 +40,6 @@ export class MyApp {
         this.rootPage = SignupPage;
       }
     });
-
     // used for an example of ngFor and navigation
     this.pages = [
       { title: 'Explore', component: FindtutorPage },
@@ -59,6 +60,7 @@ export class MyApp {
     this.platform.ready().then(() => {
       this.afAuth.authState.take(1).subscribe(auth => {
         if (auth) {
+          this.auth.getPhoto(auth);
           this.rootPage = HomePage;
         }else{
           this.rootPage = SignupPage;
@@ -70,6 +72,7 @@ export class MyApp {
       this.splashScreen.hide();
     });
   }
+
   goToInfo(){
     this.nav.push(InfoPage);
   }

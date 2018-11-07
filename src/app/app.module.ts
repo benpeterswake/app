@@ -2,8 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpClientModule } from '@angular/common/http';
-import { ImagePicker } from '@ionic-native/image-picker';
-import { PhotoLibrary } from '@ionic-native/photo-library';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { FindtutorPage } from '../pages/findtutor/findtutor';
@@ -73,8 +72,7 @@ import { AuthProvider } from '../providers/auth/auth';
     StatusBar,
     SplashScreen,
     Geolocation,
-    ImagePicker,
-    PhotoLibrary,
+    Camera, 
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthProvider
   ]

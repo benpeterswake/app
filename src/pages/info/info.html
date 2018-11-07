@@ -8,7 +8,7 @@
 
 <ion-content>
   <ion-list> 
-    <ion-item style="padding-top:20px" (click)="choosePhoto()" no-lines>
+    <ion-item style="padding-top:20px" (click)="openPhoto()" no-lines>
         <img style="width:20%" [src]="userImage">
     </ion-item>
     <ion-item>
@@ -28,7 +28,7 @@
       <ion-input #school [ngModel]="(profileData | async)?.school"></ion-input>
     </ion-item>
   </ion-list>
-  <div padding>
+  <div *ngIf="change" padding>
     <button ion-button block (click)="updateProfile({first_name: first.value, last_name: last.value, school: school.value})">Update Account</button>
   </div>
 

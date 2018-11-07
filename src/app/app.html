@@ -3,7 +3,7 @@
       <ion-list no-lines>
         <ion-item (click)="goToInfo()" menuToggle>
           <ion-avatar item-start>
-            <img src="https://i1.wp.com/www.winhelponline.com/blog/wp-content/uploads/2017/12/user.png?fit=256%2C256&quality=100&ssl=1">
+            <img [src]="auth.image">
           </ion-avatar>
             <h2 style="text-transform: capitalize">{{(profileData | async)?.full_name}}</h2>
           <p>{{(profileData | async)?.school}}</p>
