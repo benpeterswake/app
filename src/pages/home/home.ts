@@ -1,4 +1,4 @@
-import { Component, ViewChild, Input, NgZone } from '@angular/core';
+import { Component, ViewChild, OnInit, NgZone } from '@angular/core';
 import { NavController, NavParams, ToastController, MenuController, TextInput, Content, LoadingController } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase } from 'angularfire2/database';
@@ -20,7 +20,7 @@ import { TutorPage } from '../tutor/tutor';
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage {
+export class HomePage implements OnInit{
   @ViewChild('myInput') myInput: TextInput;
   content: Content;
   message: any;
@@ -72,9 +72,7 @@ export class HomePage {
     }
     this.styles = mapTheme.style;
     this.menuCtrl.enable(true, 'myMenu');
-    this.authProvider.getProfileData().then((data) => {
-        this.profileData = data;
-    });
+    this.profileData = authProvider.profileData;
     this.tutorLocation = firebase.database().ref('/tutors/locations');
     this.geoFire = new GeoFire(this.tutorLocation);
     this.dummy = [
@@ -126,6 +124,30 @@ export class HomePage {
     // // }
   }
 
+  ngOnInit(){
+    this.map = this.initMap();
+    this.initLoad = true;
+    this.getUserLocation();
+    this.hits.subscribe(hits => {
+      this.markers = hits
+    });
+  }
+
+  initMap(){
+   let options = {
+     cetner: new google.maps.LatLng(-90,90),
+     zoom: 15,
+     mapTypeId: google.maps.MapTypeId.ROADMAP,
+     disableDefaultUI: true,
+   }
+   
+   let mapEl = document.getElementById('map');
+   let map =  new google.maps.Map(mapEl, options);
+
+   return map;
+  }
+
+
   reCenter(){
     this.offCenter = false;
     this.map.panTo({ lat: this.lat+0.004, lng: this.lng })
@@ -138,7 +160,6 @@ export class HomePage {
   }
 
   getUserLocation() {
-
       let options = {
         enableHighAccuracy: true,
         timeout: 5000,
