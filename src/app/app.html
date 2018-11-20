@@ -3,10 +3,10 @@
       <ion-list no-lines>
         <ion-item (click)="goToInfo()" menuToggle>
           <ion-avatar item-start>
-            <img [src]="auth.image">
+            <img *ngIf="auth.image" [src]="auth.image">
           </ion-avatar>
-            <h2 style="text-transform: capitalize">{{(profileData | async)?.full_name}}</h2>
-          <p>{{(profileData | async)?.school}}</p>
+            <h2 style="text-transform: capitalize">{{auth.profileData?.first_name}} {{auth.profileData?.last_name}}</h2>
+          <p>{{auth.profileData?.school}}</p>
         </ion-item>
       </ion-list>
   </ion-header>

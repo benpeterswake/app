@@ -1,23 +1,31 @@
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>Account</ion-title>
-  </ion-navbar>
-
-</ion-header>
+    <ion-navbar hideBackButton color="primary">
+      <ion-buttons start>
+        <button ion-button (click)="cancel()">Cancel</button>
+      </ion-buttons>
+      <ion-title>Edit Account</ion-title>
+      <ion-buttons end >
+        <button ion-button (click)="updateProfile({first_name: first.value, last_name: last.value, school: school.value})">
+          Save
+        </button>
+      </ion-buttons>
+    </ion-navbar>
+  </ion-header>
 
 <ion-content>
   <ion-list> 
-    <ion-item style="padding-top:20px" (click)="openPhoto()" no-lines>
-        <img style="width:20%" [src]="userImage">
+    <ion-item  style="padding-top:20px" (click)="openPhoto()" no-lines>
+        <img *ngIf="userImage" style="width:20%" [src]="userImage">
+        <ion-spinner *ngIf="!userImage" name="bubbles"></ion-spinner>
     </ion-item>
+       
     <ion-item>
       <ion-label floating>First name</ion-label>
-      <ion-input #first [ngModel]="(profileData | async)?.first_name"></ion-input>
+      <ion-input #first [ngModel]="profileData?.first_name"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>Last Name</ion-label>
-      <ion-input #last [ngModel]="(profileData| async)?.last_name"></ion-input>
+      <ion-input #last [ngModel]="profileData?.last_name"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>Email</ion-label>
@@ -25,11 +33,11 @@
     </ion-item>
     <ion-item>
       <ion-label floating>School</ion-label>
-      <ion-input #school [ngModel]="(profileData | async)?.school"></ion-input>
+      <ion-input #school [ngModel]="profileData?.school"></ion-input>
     </ion-item>
   </ion-list>
-  <div *ngIf="change" padding>
-    <button ion-button block (click)="updateProfile({first_name: first.value, last_name: last.value, school: school.value})">Update Account</button>
-  </div>
+  <!-- <div *ngIf="change" padding>
+    <button ion-button block >Update Account</button>
+  </div> -->
 
 </ion-content>

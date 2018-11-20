@@ -1,16 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFireDatabase } from 'angularfire2/database';
 import firebase from 'firebase/app';
 import { Subject } from 'rxjs';
 
-/*
-  Generated class for the AuthProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class AuthProvider {
   user: any;
@@ -19,14 +11,17 @@ export class AuthProvider {
   profilePicture: any;
   image: any;
   setPhoto: Subject<any> = new Subject<any>();
+  setProfile: Subject<any> = new Subject<any>();
 
-  constructor(public http: HttpClient, private afAuth: AngularFireAuth) {
-    this.user = firebase.auth().currentUser; 
+  constructor(public http: HttpClient) {
     console.log('Hello AuthProvider Provider');
+    this.image = false;
     this.setPhoto.subscribe((url) => {
       this.image = url;
-      console.log(url);
-    })
+    });
+    this.setProfile.subscribe((data) => {
+      this.profileData = data;
+    });
   }
 
   getPhoto(user) {
@@ -36,15 +31,11 @@ export class AuthProvider {
     })
   }
 
-  getProfileData() {
-    return new Promise( resolve => {
-      if(this.user) {
-        let profile = firebase.database().ref(`users/${this.user.uid}`);
-        profile.on("value", (snapshot) => {
-          this.profileData = snapshot.val()
-          resolve(this.profileData);
-        });
-      }
-    })
+  getProfileData(user) {
+    let profile = firebase.database().ref(`users/${user.uid}`);
+    profile.on("value", (snapshot) => {  
+      console.log("hit");
+      this.setProfile.next(snapshot.val());
+    });
   }
 }

@@ -14,7 +14,6 @@ declare var $;
 
 //Pages
 import { TutorPage } from '../tutor/tutor';
-import { AgmMap } from '@agm/core';
 
 
 @Component({
@@ -23,7 +22,6 @@ import { AgmMap } from '@agm/core';
 })
 export class HomePage {
   @ViewChild('myInput') myInput: TextInput;
-  @ViewChild('AgmMap') agmMap: AgmMap;
   content: Content;
   message: any;
   items: any;
@@ -57,7 +55,7 @@ export class HomePage {
   constructor(public loadingCtrl: LoadingController, private zone: NgZone, public menuCtrl: MenuController,
     private afAuth: AngularFireAuth, private afDatabase: AngularFireDatabase, public navCtrl: NavController,
     public navParams: NavParams, private toast: ToastController, private authProvider: AuthProvider) {
-          
+    
     this.url = {
       url:"https://cdn.bocatutor.me/icons/tutor-icon-set/textbooks.png",
       scaledSize: {
@@ -113,20 +111,19 @@ export class HomePage {
   }
 
   ionViewDidLoad(){
-    this.initLoad = true;
-    this.agmMap.mapReady.subscribe(map => {
-        console.log(map);
-        this.map = map;
-        this.getUserLocation();
-    })
-    this.hits.subscribe(hits => this.markers = hits);
-    let value1 = 34.036838399999995
-    let value2 = -84.63204629999999
-    // for(let i=0; i<50; i++){
-    //   setTimeout(() => {
-    //     this.setTutorLocation('0', [value1+=0.00003, value2+=0.00003])
-    //   }, i*2000)
-    // }
+    // this.initLoad = true;
+    // this.agmMap.mapReady.subscribe(map => {
+    //     console.log(map);
+    //     this.map = map;
+    //     this.getUserLocation();
+    // this.hits.subscribe(hits => this.markers = hits);
+    // let value1 = 34.036838399999995
+    // let value2 = -84.63204629999999
+    // // for(let i=0; i<50; i++){
+    // //   setTimeout(() => {
+    // //     this.setTutorLocation('0', [value1+=0.00003, value2+=0.00003])
+    // //   }, i*2000)
+    // // }
   }
 
   reCenter(){

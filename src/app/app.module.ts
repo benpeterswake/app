@@ -14,6 +14,7 @@ import { HistoryPage } from '../pages/history/history';
 import { InfoPage } from '../pages/info/info';
 import { PaymentPage } from '../pages/payment/payment';
 import { TutorPage } from '../pages/tutor/tutor';
+import { MapComponent } from '../components/map/map';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -24,7 +25,6 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { env } from './firebase.cred';
 export const FIREBASE_CRED = env.firebaseConfig;
 
-import { AgmCoreModule } from '@agm/core';
 import { Geolocation } from '@ionic-native/geolocation';
 import { AuthProvider } from '../providers/auth/auth';
 
@@ -40,15 +40,13 @@ import { AuthProvider } from '../providers/auth/auth';
     HistoryPage,
     InfoPage,
     PaymentPage,
+    MapComponent,
     TutorPage,
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(FIREBASE_CRED),
-    AgmCoreModule.forRoot({
-      apiKey: env.googleMapsKey
-    }),
 		AngularFireAuthModule,
 		AngularFireStorageModule,
 		AngularFireDatabaseModule,
@@ -66,6 +64,7 @@ import { AuthProvider } from '../providers/auth/auth';
     HistoryPage,
     InfoPage,
     PaymentPage,
+    MapComponent,
     TutorPage
   ],
   providers: [

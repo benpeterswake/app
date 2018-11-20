@@ -33,7 +33,8 @@ export class MyApp {
     this.initializeApp();
     firebase.auth().onAuthStateChanged(auth => {
       if (auth) {
-        this.profileData = this.afDatabase.object(`users/${auth.uid}`).valueChanges();
+        this.auth.getProfileData(auth);
+        this.auth.getPhoto(auth);
         this.rootPage = HomePage;
       } else {
         this.profileData = null;
@@ -60,6 +61,7 @@ export class MyApp {
     this.platform.ready().then(() => {
       this.afAuth.authState.take(1).subscribe(auth => {
         if (auth) {
+          this.auth.getProfileData(auth);
           this.auth.getPhoto(auth);
           this.rootPage = HomePage;
         }else{

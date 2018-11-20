@@ -108,18 +108,11 @@
           <button ion-fab><ion-icon name="locate"></ion-icon></button>
         </ion-fab>         
         <div [hidden]="show && !showMap">
-          <agm-map #AgmMap (pan)="fadeInCenterBtn()" [zoomControl]=false [streetViewControl]="false" [disableDefaultUI]="true" [zoom]="15" [styles]="styles">
-            <agm-marker [iconUrl]="user" [latitude]="lat" [longitude]="lng">
-              <agm-info-window>
-                <h3>My Location</h3>
-              </agm-info-window>
-            </agm-marker>
-            <agm-marker *ngFor="let marker of markers" [iconUrl]="url" [latitude]="marker.location[0]" [longitude]="marker.location[1]">
-              <agm-info-window>
-                <h3>{{marker}}</h3>
-              </agm-info-window>
-            </agm-marker>
-          </agm-map>
+          <div class="map-wrapper">
+            <div class="wrapper">
+              <div id="map"></div>
+           </div>
+          </div>
         </div>
 
         <!-- footer -->
@@ -128,5 +121,6 @@
             <ion-title>Set meet up location</ion-title>
           </ion-toolbar>
         </ion-footer>
-  </div>
+      </div>
+
 </ion-content>

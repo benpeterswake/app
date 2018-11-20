@@ -102,7 +102,7 @@ export class SignupPage {
   changeSlide(direction, validate){
     if(direction){
       if(validate === 2){
-        if(this.profile.first_name && this.user.email){
+        if(this.profile.first_name && this.profile.last_name && this.user.email){
           this.swipe()
         }else{
           this.toast.create({
@@ -112,7 +112,7 @@ export class SignupPage {
           }).present();
         }
       }else if(validate === 3){
-        if(this.profile.school && this.autocomplete.length){
+        if(this.autocomplete.length){
           this.toast.create({
             message: "Please select a school",
             duration: 2500,
