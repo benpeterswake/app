@@ -3,17 +3,23 @@ import { NavController, NavParams, ToastController, MenuController, TextInput, C
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AuthProvider } from '../../providers/auth/auth';
+import "rxjs/Rx";
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import mapTheme from '../../theme/mapTheme.json';
+
+//Firebase
 import firebase from 'firebase/app';
 import 'firebase/database'
 import * as GeoFire from 'geofire';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import mapTheme from '../../theme/mapTheme.json';
-import "rxjs/Rx";
-declare var google;
-declare var $;
 
 //Pages
 import { TutorPage } from '../tutor/tutor';
+import { Geolocation } from '@ionic-native/geolocation';
+
+//Global
+var SlidingMarker = require('marker-animate-unobtrusive');
+declare var google;
+declare var $;
 
 
 @Component({
@@ -43,36 +49,23 @@ export class HomePage implements OnInit{
   tutors: any = [];
   lat: number;
   lng: number;
-  markers: any;
-  url: any;
+  markers: any[] = [];
   styles: any;
-  user: any;
   map:any;
   id: any;
   offCenter: Boolean = false;
   initLoad: Boolean = true;
 
-  constructor(public loadingCtrl: LoadingController, private zone: NgZone, public menuCtrl: MenuController,
+  constructor(public locate: Geolocation,public loadingCtrl: LoadingController, private zone: NgZone, public menuCtrl: MenuController,
     private afAuth: AngularFireAuth, private afDatabase: AngularFireDatabase, public navCtrl: NavController,
     public navParams: NavParams, private toast: ToastController, private authProvider: AuthProvider) {
-    
-    this.url = {
-      url:"https://cdn.bocatutor.me/icons/tutor-icon-set/textbooks.png",
-      scaledSize: {
-          width: 20,
-          height: 20
-      }
-    }
-    this.user = {
-      url:"https://maps.umd.edu/map/img/ResearchAndDiscovery_c.png",
-      scaledSize: {
-          width: 30,
-          height: 30
-      }
-    }
     this.styles = mapTheme.style;
     this.menuCtrl.enable(true, 'myMenu');
-    this.profileData = authProvider.profileData;
+    authProvider.setProfile.subscribe((data) => {
+      this.profileData = data;
+      console.log(data);
+      
+    });   
     this.tutorLocation = firebase.database().ref('/tutors/locations');
     this.geoFire = new GeoFire(this.tutorLocation);
     this.dummy = [
@@ -108,49 +101,60 @@ export class HomePage implements OnInit{
     ]
   }
 
-  ionViewDidLoad(){
-    // this.initLoad = true;
-    // this.agmMap.mapReady.subscribe(map => {
-    //     console.log(map);
-    //     this.map = map;
-    //     this.getUserLocation();
-    // this.hits.subscribe(hits => this.markers = hits);
-    // let value1 = 34.036838399999995
-    // let value2 = -84.63204629999999
-    // // for(let i=0; i<50; i++){
-    // //   setTimeout(() => {
-    // //     this.setTutorLocation('0', [value1+=0.00003, value2+=0.00003])
-    // //   }, i*2000)
-    // // }
-  }
 
   ngOnInit(){
     this.map = this.initMap();
     this.initLoad = true;
     this.getUserLocation();
     this.hits.subscribe(hits => {
-      this.markers = hits
+      for(let i=0; i< hits.length;i++) {
+        let carMarker = new SlidingMarker({
+          position: {lat: hits[i].location[0], lng: hits[i].location[1]},
+          map: this.map,
+          title: 'Tutor',
+          icon: {
+            url:"https://cdn.bocatutor.me/icons/tutor-icon-set/textbooks.png",
+            scaledSize: {
+                width: 20,
+                height: 20
+            }
+          }
+        });
+        carMarker.setDuration(2000);
+        carMarker.setEasing('linear');
+        carMarker.set('key', hits[i].key);
+        this.markers.push(carMarker);
+      }
     });
+
+    setTimeout(() => {
+      this.setTutorLocation('0', [33.333333,-84])
+    }, 5000)
+    setTimeout(() => {
+      this.setTutorLocation('0', [33.3344444,-84])
+    }, 7000)
+    setTimeout(() => {
+      this.setTutorLocation('0', [33.3355555,-84])
+    }, 9000)
+
   }
 
   initMap(){
    let options = {
-     cetner: new google.maps.LatLng(-90,90),
+     center: new google.maps.LatLng(-90,90),
      zoom: 15,
      mapTypeId: google.maps.MapTypeId.ROADMAP,
      disableDefaultUI: true,
    }
-   
    let mapEl = document.getElementById('map');
    let map =  new google.maps.Map(mapEl, options);
-
    return map;
   }
 
 
   reCenter(){
     this.offCenter = false;
-    this.map.panTo({ lat: this.lat+0.004, lng: this.lng })
+    this.map.panTo({ lat: this.lat+0.0025, lng: this.lng })
     this.map.setZoom(15)
   }
 
@@ -165,41 +169,45 @@ export class HomePage implements OnInit{
         timeout: 5000,
         maximumAge: 0
       };
-      navigator.geolocation.getCurrentPosition(position => {
-        this.lat = position.coords.latitude;
-        this.lng = position.coords.longitude;
-        let latlng = { lat: this.lat, lng: this.lng }
-        this.getAddress(latlng)
-        this.reCenter()
-        this.getTutorLocations(500, [this.lat, this.lng])
-        this.updateTutorLocation(500, [this.lat, this.lng]) 
-        $('#trending').removeAttr("style"); 
-        $("#inputFields").animate({
-          top: '1%'
-        }, 1800, () => {
-          $("#trending").slideDown("slow");
-        });
-        this.initLoad = false;
-        this.watchUserLocation();
+      this.locate.watchPosition(options).subscribe((position) => {
+        console.log(position);
+        if(position){
+          this.lat = position.coords.latitude;
+          this.lng = position.coords.longitude;
+          let latlng = { lat: this.lat, lng: this.lng }
+          let location = new SlidingMarker({
+            position: latlng,
+            map: this.map,
+            title: 'You are here!',
+            icon: {
+                url:"https://maps.umd.edu/map/img/ResearchAndDiscovery_c.png",
+                scaledSize: {
+                    width: 30,
+                    height: 30
+                }
+              }
+          });
+          location.setDuration(2000);
+          location.setEasing('linear'); 
+          this.getAddress(latlng);
+          if(this.initLoad){
+            this.reCenter();
+            this.getTutorLocations(500, [this.lat, this.lng]);
+            this.updateTutorLocation(500, [this.lat, this.lng]); 
+            $('#trending').removeAttr("style"); 
+            $("#inputFields").animate({
+              top: '1%'
+            }, 1800, () => {
+              $("#trending").slideDown("slow");
+            });
+            this.initLoad = false;
+          }
+        } else {
+          throw new Error("Could Not Find Location")
+        }
       }, (error) => {
         console.log(error);
-      }, options);
-  }
-
-  watchUserLocation() {
-    let options = {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0
-    };
-    navigator.geolocation.getCurrentPosition(position => {
-      this.lat = position.coords.latitude;
-      this.lng = position.coords.longitude;
-      let latlng = { lat: this.lat, lng: this.lng }
-      this.getAddress(latlng)
-    }, (error) => {
-      console.log(error);
-    }, options)
+      });
   }
 
   getAddress(latlng) {
@@ -223,13 +231,12 @@ export class HomePage implements OnInit{
       radius: radius
     })
     .on('key_entered', (key, location, distance) => {
-      console.log(this.hits)
       let hit = {
         key: key,
         location: location,
         distance: distance
       }
-      let currentHits = this.hits.value;
+      let currentHits = [];
       currentHits.push(hit);
       this.hits.next(currentHits);
     })
@@ -245,10 +252,9 @@ export class HomePage implements OnInit{
         key: key,
         location: location,
         distance: distance
-      }
-      var elementPos = this.hits.value.map(function(x) {return x.key; }).indexOf(key);
-      this.hits.value[elementPos] = hit;
-      console.log(this.hits)
+      }      
+      var elementPos = this.markers.map(function(x) {return x.key; }).indexOf(key);     
+      this.markers[elementPos].setPosition({lat: location[0], lng: location[1]});
     })
   }
 
@@ -327,7 +333,6 @@ export class HomePage implements OnInit{
     this.order.course = null;
     this.reCenter();
   }
-
 
   selectCourse(course){
     $('#inputFields').addClass("location");

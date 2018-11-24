@@ -66,9 +66,9 @@
           
           <!-- trending drop down -->
           <div [hidden]="courses.length" id="trending">
-            <ion-item [ngClass]="{'color': show}" no-lines color="primary">
+            <ion-item [ngClass]="{'lines': show}" no-lines color="primary">
               <!-- <ion-icon *ngIf="!show" (click)="hideTrending()" name="remove-circle" item-end></ion-icon> -->
-              <ion-icon *ngIf="show" name="arrow-forward" style="color:lightgrey" item-end></ion-icon>
+              <ion-icon *ngIf="show" name="arrow-forward" style="color:lightgrey;" item-end></ion-icon>
               <h2>Trending Courses</h2>
             </ion-item>
             <div *ngIf="show">
@@ -81,10 +81,10 @@
                 <h2>Top Priced Tutors</h2>
               </ion-item>
             </div>
-            <ion-list [hidden]="show" no-lines style="margin-bottom: 0">
-              <button *ngFor="let course of trendingCourses" (click)="selectCourse(course); expandAnimation()" ion-item style="border-bottom: 1px solid #f4f4f4">
-                 <ion-icon name="{{course.icon}}" item-start></ion-icon>
-                {{course.name}}
+            <ion-list no-lines [hidden]="show"  style="margin-bottom: 0">
+              <button *ngFor="let trending of trendingCourses" (click)="selectCourse(course); expandAnimation()" ion-item>
+                 <ion-icon name="{{trending.icon}}" item-start></ion-icon>
+                {{trending.name}}
               </button>
             </ion-list>
           </div>
@@ -101,7 +101,7 @@
         </div>
 
         <!-- Generated template for the GoogleMapComponent component -->
-        <div *ngIf="showLocation" style="position: fixed; z-index:1; top:48%; left: 50%; transform: translateX(-50%);">
+        <div *ngIf="showLocation" style="position: fixed; z-index:2; top:48%; left: 50%; transform: translateX(-50%);">
           <img width="35px" src="https://mbtskoudsalg.com/images/push-pin-icon-png-5.png" alt="">
         </div>
         <ion-fab id="centerBtn" *ngIf="offCenter" (click)="reCenter()"  style="bottom: 6%" right bottom>
@@ -110,17 +110,29 @@
         <div [hidden]="show && !showMap">
           <div class="map-wrapper">
             <div class="wrapper">
-              <div id="map"></div>
+              <div #map id="map"></div>
            </div>
           </div>
         </div>
 
         <!-- footer -->
-        <ion-footer (click)="setMeetUpLocation()">
-          <ion-toolbar style="height: 80px" *ngIf="showLocation" color="primary">
+        <ion-footer *ngIf="showLocation" (click)="setMeetUpLocation()">
+          <ion-toolbar style="height: 80px" color="primary">
             <ion-title>Set meet up location</ion-title>
           </ion-toolbar>
         </ion-footer>
-      </div>
 
+        <!-- footer -->
+        <ion-footer *ngIf="!show" no-border padding>
+          <ion-item no-lines style="height: 80px;  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.46);" color="primary">
+            <ion-avatar item-start>
+              <img src="https://www.shareicon.net/data/512x512/2016/07/08/792751_cap_512x512.png">
+            </ion-avatar>
+            <h2>Become a student tutor!</h2>
+            <button ion-button item-end>
+              <ion-icon name="arrow-forward"></ion-icon>
+            </button>
+          </ion-item>
+        </ion-footer>
+      </div>
 </ion-content>

@@ -6,12 +6,6 @@ page-home {
   .completed{
     background: #f9f9f9;
   }
-  .color {
-    padding-top:9px; padding-bottom: 5px;
-    color: black;
-    border-bottom: 1px solid #f4f4f4!important;
-    background-color: white!important
-  }
   #inputFields{
     display: block;
     position: absolute;
@@ -20,7 +14,10 @@ page-home {
     top: -40%;
   }
   .lines{
-    border-bottom:1px solid #f9f9f9!important;
+    padding-top:9px; padding-bottom: 5px;
+    color: black;
+    border-bottom: 1px solid #f4f4f4!important;
+    background-color: white!important
   }
 
   #trending{

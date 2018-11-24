@@ -19,7 +19,7 @@ export class AuthProvider {
     this.setPhoto.subscribe((url) => {
       this.image = url;
     });
-    this.setProfile.subscribe((data) => {
+    this.setProfile.subscribe((data) => {      
       this.profileData = data;
     });
   }
@@ -34,7 +34,6 @@ export class AuthProvider {
   getProfileData(user) {
     let profile = firebase.database().ref(`users/${user.uid}`);
     profile.on("value", (snapshot) => {  
-      console.log("hit");
       this.setProfile.next(snapshot.val());
     });
   }
