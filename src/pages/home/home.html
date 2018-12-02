@@ -82,7 +82,7 @@
               </ion-item>
             </div>
             <ion-list no-lines [hidden]="show"  style="margin-bottom: 0">
-              <button *ngFor="let trending of trendingCourses" (click)="selectCourse(course); expandAnimation()" ion-item>
+              <button *ngFor="let trending of trendingCourses" (click)="selectCourse(trending); expandAnimation()" ion-item>
                  <ion-icon name="{{trending.icon}}" item-start></ion-icon>
                 {{trending.name}}
               </button>
@@ -123,7 +123,7 @@
         </ion-footer>
 
         <!-- footer -->
-        <ion-footer *ngIf="!show" no-border padding>
+        <ion-footer *ngIf="!show" no-border padding style="padding-bottom: 8%;">
           <ion-item no-lines style="height: 80px;  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.46);" color="primary">
             <ion-avatar item-start>
               <img src="https://www.shareicon.net/data/512x512/2016/07/08/792751_cap_512x512.png">

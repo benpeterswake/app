@@ -65,7 +65,7 @@ export class InfoPage {
         spinner: 'dots',
         content: 'This may take a few seconds...'
       });
-      let loading2 = this.loadingCtrl.create({
+      let success = this.loadingCtrl.create({
         spinner: 'hide',
         content: 'Succces'
       });
@@ -73,9 +73,9 @@ export class InfoPage {
       this.storage.putString(this.userImage, 'data_url').then(() => {
         this.auth.getPhoto(this.user);
         loading.dismiss();
-        loading2.present();
+        success.present();
         setTimeout(() => {
-          loading2.dismiss();
+          success.dismiss();
           this.navCtrl.pop();
         }, 1000)
       }, (err) => alert(err))

@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnInit, NgZone } from '@angular/core';
-import { NavController, NavParams, ToastController, MenuController, TextInput, Content, LoadingController } from 'ionic-angular';
+import { NavController, NavParams, ToastController, MenuController, TextInput, LoadingController } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { AuthProvider } from '../../providers/auth/auth';
@@ -28,23 +28,18 @@ declare var $;
 })
 export class HomePage implements OnInit{
   @ViewChild('myInput') myInput: TextInput;
-  content: Content;
   message: any;
   items: any;
   hits = new BehaviorSubject([]);
   geoFire: any;
   profileData: any;
-  topTutors: any = [];
   tutorLocation: any;
   order: any = {};
   show: any = false;
   showLocation: any = false;
   showMap: any = true;
-  showInputs: any = true;
   dummy: any = [];
   courses: any = [];
-  goTutor: any = false;
-  userID: any;
   trendingCourses: any = [];
   tutors: any = [];
   lat: number;
@@ -52,7 +47,7 @@ export class HomePage implements OnInit{
   markers: any[] = [];
   styles: any;
   map:any;
-  id: any;
+  location: any;
   offCenter: Boolean = false;
   initLoad: Boolean = true;
 
@@ -63,8 +58,6 @@ export class HomePage implements OnInit{
     this.menuCtrl.enable(true, 'myMenu');
     authProvider.setProfile.subscribe((data) => {
       this.profileData = data;
-      console.log(data);
-      
     });   
     this.tutorLocation = firebase.database().ref('/tutors/locations');
     this.geoFire = new GeoFire(this.tutorLocation);
@@ -154,7 +147,7 @@ export class HomePage implements OnInit{
 
   reCenter(){
     this.offCenter = false;
-    this.map.panTo({ lat: this.lat+0.0025, lng: this.lng })
+    this.map.panTo({ lat: this.lat+0.002, lng: this.lng })
     this.map.setZoom(15)
   }
 
@@ -170,27 +163,26 @@ export class HomePage implements OnInit{
         maximumAge: 0
       };
       this.locate.watchPosition(options).subscribe((position) => {
-        console.log(position);
-        if(position){
+        if(position.coords){
           this.lat = position.coords.latitude;
           this.lng = position.coords.longitude;
           let latlng = { lat: this.lat, lng: this.lng }
-          let location = new SlidingMarker({
-            position: latlng,
-            map: this.map,
-            title: 'You are here!',
-            icon: {
-                url:"https://maps.umd.edu/map/img/ResearchAndDiscovery_c.png",
-                scaledSize: {
-                    width: 30,
-                    height: 30
-                }
-              }
-          });
-          location.setDuration(2000);
-          location.setEasing('linear'); 
           this.getAddress(latlng);
           if(this.initLoad){
+          this.location = new SlidingMarker({
+              position: latlng,
+              map: this.map,
+              title: 'You are here!',
+              icon: {
+                  url:"https://maps.umd.edu/map/img/ResearchAndDiscovery_c.png",
+                  scaledSize: {
+                      width: 30,
+                      height: 30
+                  }
+                }
+            });
+            this.location.setDuration(2000);
+            this.location.setEasing('linear');
             this.reCenter();
             this.getTutorLocations(500, [this.lat, this.lng]);
             this.updateTutorLocation(500, [this.lat, this.lng]); 
@@ -201,10 +193,10 @@ export class HomePage implements OnInit{
               $("#trending").slideDown("slow");
             });
             this.initLoad = false;
+          } else {
+            this.location.setPosition(latlng)
           }
-        } else {
-          throw new Error("Could Not Find Location")
-        }
+        } 
       }, (error) => {
         console.log(error);
       });
@@ -213,9 +205,11 @@ export class HomePage implements OnInit{
   getAddress(latlng) {
     let geocoder = new google.maps.Geocoder();
     geocoder.geocode({'location' : latlng}, (result) => {
-      this.zone.run(() => {
-        this.order.location = result[0].formatted_address;
-      });
+      if(result[0]){
+        this.zone.run(() => {
+          this.order.location = result[0].formatted_address;
+        });
+      }
     })
   }
 
