@@ -59,7 +59,7 @@ $button-ios-strong-font-weight: 700;
 
 /* ion-item */
 $item-ios-body-text-font-size: 3rem;
-$item-ios-padding-left: 3.7rem;
+$item-ios-padding-start: 3.7rem; // 
 
 /* ion-toggle */
 $toggle-ios-width: 6.2876rem;
@@ -68,7 +68,7 @@ $toggle-ios-border-width: 0rem;
 $toggle-ios-handle-width: 3.5rem;
 $toggle-ios-handle-height: 3.5rem;
 // $toggle-ios-handle-border-width: 0.2rem;
-$toggle-ios-background-color-on: color($colors, dark);
+$toggle-ios-background-color-on: color($colors, secondary);
 $toggle-ios-background-color-off: color($colors, light);
 
 
@@ -87,14 +87,14 @@ $button-md-strong-font-weight: 700;
 /* ion-item */
 $item-md-font-size: 3rem;
 $item-md-body-text-font-size: 3rem;
-$item-md-padding-left: 3.7rem;
+$item-md-padding-start: 1.8rem; // =2.8rem/1.5
 
 /* ion-toggle */
 $toggle-md-track-width: 6.2876rem;
 $toggle-md-track-height: 3rem;
 $toggle-md-handle-width: 3.5rem;
 $toggle-md-handle-height: 3.5rem;
-$toggle-md-background-color-on: color($colors, dark);
+$toggle-md-background-color-on: color($colors, secondary);
 $toggle-md-background-color-off: color($colors, light);
 
 
@@ -113,7 +113,7 @@ $button-wp-strong-font-weight: 700;
 /* ion-item */
 $item-wp-font-size: 3rem;
 $item-wp-body-text-font-size: 3rem;
-$item-wp-padding-left: 3.7rem;
+$item-wp-padding-start: 3.7rem;
 
 /* ion-toggle */
 $toggle-wp-track-width: 6.2876rem;
@@ -123,7 +123,7 @@ $toggle-wp-handle-top: -0.2rem;
 $toggle-wp-handle-left: -0.2rem;
 $toggle-wp-handle-width: 3.5rem;
 $toggle-wp-handle-height: 3.5rem;
-$toggle-wp-background-color-on: color($colors, dark);
+$toggle-wp-background-color-on: color($colors, secondary);
 $toggle-wp-background-color-off: color($colors, light);
 
 
