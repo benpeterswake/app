@@ -8,7 +8,7 @@ page-login {
 
     .logo-section {
       background-color: rgba(0, 113, 188, 0.75);
-      height: 42.6rem; // was 40% before keyboard bug
+      height: 40%;
       display: flex;
       flex-flow: column nowrap;
       align-items: center;
@@ -26,25 +26,31 @@ page-login {
 
     .input-section {
       background-color: rgba(0, 0, 0, 0.75);
-      height: calc(100% - 42.6rem); // was 60% before keyboard bug
+      height: 60%;
 
       ion-list {
         border-top: 1px solid white;
 
         ion-item {
-          padding: 0 4.2rem;
+          padding: 0 3rem;
           border-top: none !important;
           border-bottom: 1px solid white;
 
+          ion-icon {
+            font-size: 3.6rem;
+            padding: 0 1.3438rem;
+            margin: 0.8rem 2.4rem 0.8rem 0 !important;
+            box-sizing: content-box;
+          }
           .item-inner {
             border: none !important;
+            &, input { margin-left: 0 !important; }
           }
 
           &.remember-me {
-            padding-left: 3rem;
-
             ion-toggle {
-              margin-right: 4px;
+              margin-right: 2.4rem;
+              padding-right: 0 !important;
               
               .toggle-inner {
                 background-image: #{$bg-gradient};
