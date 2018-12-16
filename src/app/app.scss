@@ -18,31 +18,58 @@
 //   font-family: 'Luckiest Guy', cursive;
 //   color:green;
 // }
-.ios{
-  .menuHeader{
-    padding-top:25px;
-    height:90px;
+
+html { font-size: calc((10 / 600)*(100vw - 0px)) }
+
+[ion-fixed] {
+  height: 100%;
+  width: 100%;
+}
+
+ion-icon {
+  &[class*="custom-"] {
+    mask-size: contain;
+    mask-position: 50% 50%;
+    mask-repeat: no-repeat;
+    background: currentColor;
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  &[class*="custom-email"] {
+    mask-image: url(../assets/icon/tutor-icon-email.svg);
+  }
+  &[class*="custom-lock"] {
+    mask-image: url(../assets/icon/tutor-icon-lock.svg);
   }
 }
 
-.md{
-  .menuHeader{
-    height:65px;
+.ios {
+  .menuHeader {
+    padding-top: 25px;
+    height: 90px;
   }
 }
 
-.error{
-  > div{
-    background-color:red!important;
-  }
-}
-.success{
-  > div{
-    background-color:green!important;
+.md {
+  .menuHeader {
+    height: 65px;
   }
 }
 
-.subMenu{
+.error {
+  > div {
+    background-color: red!important;
+  }
+}
+.success {
+  > div {
+    background-color: green!important;
+  }
+}
+
+.subMenu {
   font-size: 13px;
   font-weight: bolder;
 }
+

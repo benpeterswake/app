@@ -22,7 +22,10 @@ $app-direction: ltr;
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/theming/overriding-ionic-variables/
 
-
+$list-background-color: transparent;
+$list-text-color: #fff;
+$font-size-base: 2.75rem;
+$font-family-base: "Titillium Web", sans-serif;
 
 
 // Named Color Variables
@@ -34,33 +37,94 @@ $app-direction: ltr;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #488aff,
-  secondary:  #32d18e,
+  primary:    #0071bc,
+  secondary:  #29abe2,
   danger:     #f53d3d,
   light:      #f4f4f4,
   dark:       #222
 );
+
+$bg-gradient: linear-gradient(to right, #29abe2, #0071bc);
 
 
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here
 
+/* ion-button */
+$button-ios-height: 8rem;
+$button-ios-font-size: 4.4rem;
+$button-ios-border-radius: 0px;
+$button-ios-strong-font-weight: 700;
 
+/* ion-item */
+$item-ios-body-text-font-size: 3rem;
+$item-ios-padding-left: 3.7rem;
+
+/* ion-toggle */
+$toggle-ios-width: 6.2876rem;
+$toggle-ios-height: 3rem;
+$toggle-ios-border-width: 0rem;
+$toggle-ios-handle-width: 3.5rem;
+$toggle-ios-handle-height: 3.5rem;
+// $toggle-ios-handle-border-width: 0.2rem;
+$toggle-ios-background-color-on: color($colors, dark);
+$toggle-ios-background-color-off: color($colors, light);
 
 
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
 
+$font-family-md-base: $font-family-base;
 
+/* ion-button */
+$button-md-height: 8rem;
+$button-md-font-size: 4.4rem;
+$button-md-border-radius: 0px;
+$button-md-strong-font-weight: 700;
+
+/* ion-item */
+$item-md-font-size: 3rem;
+$item-md-body-text-font-size: 3rem;
+$item-md-padding-left: 3.7rem;
+
+/* ion-toggle */
+$toggle-md-track-width: 6.2876rem;
+$toggle-md-track-height: 3rem;
+$toggle-md-handle-width: 3.5rem;
+$toggle-md-handle-height: 3.5rem;
+$toggle-md-background-color-on: color($colors, dark);
+$toggle-md-background-color-off: color($colors, light);
 
 
 // App Windows Variables
 // --------------------------------------------------
 // Windows only Sass variables can go here
 
+$font-family-wp-base: $font-family-base;
 
+/* ion-button */
+$button-wp-height: 8rem;
+$button-wp-font-size: 4.4rem;
+$button-wp-border-radius: 0px;
+$button-wp-strong-font-weight: 700;
+
+/* ion-item */
+$item-wp-font-size: 3rem;
+$item-wp-body-text-font-size: 3rem;
+$item-wp-padding-left: 3.7rem;
+
+/* ion-toggle */
+$toggle-wp-track-width: 6.2876rem;
+$toggle-wp-track-height: 3rem;
+$toggle-wp-track-border-width: 0rem;
+$toggle-wp-handle-top: -0.2rem;
+$toggle-wp-handle-left: -0.2rem;
+$toggle-wp-handle-width: 3.5rem;
+$toggle-wp-handle-height: 3.5rem;
+$toggle-wp-background-color-on: color($colors, dark);
+$toggle-wp-background-color-off: color($colors, light);
 
 
 // App Theme
@@ -84,5 +148,6 @@ $colors: (
 // Fonts
 // --------------------------------------------------
 
-@import "roboto";
-@import "noto-sans";
+// @import "roboto";
+// @import "noto-sans";
+@import "../assets/fonts/titillium-web";

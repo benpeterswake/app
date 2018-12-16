@@ -1,3 +1,82 @@
 page-login {
+  background-image: url('../../assets/imgs/map.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 
-}
+  ion-content {
+    background-color: transparent !important;
+
+    .logo-section {
+      background-color: rgba(0, 113, 188, 0.75);
+      height: 42.6rem; // was 40% before keyboard bug
+      display: flex;
+      flex-flow: column nowrap;
+      align-items: center;
+      align-content: center;
+      justify-content: space-evenly;
+      padding: 2.01rem 0;
+
+      img {
+        display: block;
+
+        &#emblem { height: 7.4rem }
+        &#lettermark { height: 8.2rem }
+      }
+    }
+
+    .input-section {
+      background-color: rgba(0, 0, 0, 0.75);
+      height: calc(100% - 42.6rem); // was 60% before keyboard bug
+
+      ion-list {
+        border-top: 1px solid white;
+
+        ion-item {
+          padding: 0 4.2rem;
+          border-top: none !important;
+          border-bottom: 1px solid white;
+
+          .item-inner {
+            border: none !important;
+          }
+
+          &.remember-me {
+            padding-left: 3rem;
+
+            ion-toggle {
+              margin-right: 4px;
+              
+              .toggle-inner {
+                background-image: #{$bg-gradient};
+                border: solid thin white;
+                top: -0.2rem;
+              }
+            }
+            ion-label {
+              color: #{$text-input-placeholder-color};
+
+              &.remembering { color: white; }
+            }
+          }
+        }
+        ion-item:last-child {
+          border-bottom: none !important;
+        }
+      }
+    }
+    .nav-section {
+      // background-color: rgba(0, 0, 0, 0.75) !important;
+      left: 0;
+      bottom: 0;
+      position: absolute;
+      display: block;
+      width: 100%;
+  
+      button {
+        background-image: #{$bg-gradient};
+      }
+      span, a { color: white; }
+    }
+
+  } // end ion-content
+} // end page-login

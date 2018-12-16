@@ -8,7 +8,7 @@ import { AuthProvider } from '../providers/auth/auth';
 import * as firebase from 'firebase';
 
 //Pages
-import { SignupPage } from '../pages/signup/signup';
+import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { FindtutorPage } from '../pages/findtutor/findtutor';
 import { ProfilePage } from '../pages/profile/profile';
@@ -38,7 +38,7 @@ export class MyApp {
         this.rootPage = HomePage;
       } else {
         this.profileData = null;
-        this.rootPage = SignupPage;
+        this.rootPage = LoginPage;
       }
     });
     // used for an example of ngFor and navigation
@@ -65,7 +65,7 @@ export class MyApp {
           this.auth.getPhoto(auth);
           this.rootPage = HomePage;
         }else{
-          this.rootPage = SignupPage;
+          this.rootPage = LoginPage;
         }
       });
       // Okay, so the platform is ready and our plugins are available.

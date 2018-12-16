@@ -1,21 +1,30 @@
-<ion-content>
-  <div style="padding:40% 0 0 14px">
-    <h2 style="font-weight:bold">Log in to Grade Up</h2>
+<ion-content no-bounce>
+  <div class="logo-section">
+    <div><img id="emblem" src="../../assets/imgs/tutor-emblem.png" /></div>
+    <div><img id="lettermark" src="../../assets/imgs/tutor-lettermark.png" /></div>
   </div>
-  <ion-list>
-    <ion-item>
-      <ion-label floating>Email</ion-label>
-      <ion-input [(ngModel)]="user.email" type="email"></ion-input>
-    </ion-item>
-
-    <ion-item>
-      <ion-label floating>Password</ion-label>
-      <ion-input [(ngModel)]="user.password" type="password"></ion-input>
-    </ion-item>
-  </ion-list>
-
-  <button padding ion-button full (click)="login()">Login</button>
-  <div text-center padding>
-    <a (click)="goToSignup()">Sign Up</a>
+  <div class="input-section">
+    <ion-list>
+      <ion-item>
+        <ion-icon item-start name="custom-email"></ion-icon>
+        <ion-input [(ngModel)]="user.email" type="email" placeholder="Username/Email"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-icon item-start name="custom-lock"></ion-icon>
+        <ion-input [(ngModel)]="user.password" type="password" placeholder="Password"></ion-input>
+      </ion-item>
+      <ion-item class="remember-me">
+        <ion-toggle item-start [(ngModel)]="user.remember"></ion-toggle>
+        <ion-label [ngClass]="{ 'remembering': user.remember }">Remember Me</ion-label>
+      </ion-item>
+    </ion-list>
+    <div class="nav-section">
+      <button strong ion-button full (click)="login()">SIGN IN</button>
+      <div text-center padding>
+        <span>
+          <a>Forgot Password?</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a (click)="goToSignup()">Sign Up</a>
+        </span>
+      </div>
+    </div>
   </div>
 </ion-content>
